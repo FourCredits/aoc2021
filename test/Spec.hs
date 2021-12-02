@@ -7,7 +7,7 @@ main :: IO Counts
 main = runTestTT $ TestList [day1]
 
 withInput :: FilePath -> (String -> a) -> (a -> Assertion) -> Assertion
-withInput file parser action = action =<< parser <$> readFile file
+withInput file parser action = action . parser =<< readFile file
 
 day1 :: Test
 day1 =
