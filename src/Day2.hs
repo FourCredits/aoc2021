@@ -1,6 +1,6 @@
 module Day2 where
 
-import Control.Arrow
+import Data.List
 
 data Direction = Forward | Up | Down deriving (Show, Eq)
 
@@ -17,14 +17,14 @@ parse = map instruction . lines
         ["down", n]    -> (Down, read n)
 
 part1 :: [Instruction] -> Int
-part1 = (uncurry (*)) . foldr f (0, 0)
+part1 = uncurry (*) . foldl' f (0, 0)
   where
-    f (Forward, n) (hPos, depth) = (hPos + n, depth)
-    f (Up, n)      (hPos, depth) = (hPos, depth - n)
-    f (Down, n)    (hPos, depth) = (hPos, depth + n)
+    f (hPos, depth) (Forward, n) = (hPos + n, depth)
+    f (hPos, depth) (Up, n)      = (hPos, depth - n)
+    f (hPos, depth) (Down, n)    = (hPos, depth + n)
 
 part2 :: [Instruction] -> Int
-part2 = (\(h, d, a) -> h * d) . foldl f (0, 0, 0)
+part2 = (\(h, d, a) -> h * d) . foldl' f (0, 0, 0)
   where
     f (h, d, a) (Forward, n) = (h + n, d + (a * n), a)
     f (h, d, a) (Up, n)      = (h, d, a - n)
