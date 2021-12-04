@@ -18,8 +18,7 @@ parse s =
   let (cNumbers:_:boardLines) = lines s
       chosenNumbers = read $ '[' : cNumbers ++ "]"
       boardsChunks = map (take 5) $ chunksOf 6 boardLines
-      parseLine l = read $ '[' : intercalate "," (words l) ++ "]"
-      boards = map (mkBoard . map parseLine) boardsChunks
+      boards = map (mkBoard . map (map read . words)) boardsChunks
    in (chosenNumbers, boards)
 
 hasWon :: Board -> Bool
