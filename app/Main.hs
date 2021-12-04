@@ -1,6 +1,4 @@
 module Main where
 
-import Lib
-
 main :: IO ()
-main = someFunc
+main = putStrLn "This is AOC 2021! Try running the tests to see the progress!"
