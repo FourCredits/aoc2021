@@ -2,24 +2,24 @@
 
 module Day4 where
 
+import Data.Either
 import Data.List
+import Text.Parsec
 
 type Board = [[(Int, Bool)]]
 
 mkBoard :: [[Int]] -> Board
 mkBoard = map (map (, False))
 
-chunksOf :: Int -> [a] -> [[a]]
-chunksOf n [] = []
-chunksOf n as = take n as : chunksOf n (drop n as)
-
-parse :: String -> ([Int], [Board])
-parse s =
-  let (cNumbers:_:boardLines) = lines s
-      chosenNumbers = read $ '[' : cNumbers ++ "]"
-      boardsChunks = map (take 5) $ chunksOf 6 boardLines
-      boards = map (mkBoard . map (map read . words)) boardsChunks
-   in (chosenNumbers, boards)
+parser :: String -> ([Int], [Board])
+parser = fromRight ([], []) . parse input ""
+  where
+    input = (,) <$> chosenNumbers <*> boards
+    chosenNumbers = sepBy num (char ',') <* count 2 endOfLine
+    num = read <$> many1 digit
+    boards = sepEndBy board endOfLine
+    board = mkBoard <$> count 5 (line <* endOfLine)
+    line = count 5 (many (char ' ') *> num)
 
 hasWon :: Board -> Bool
 hasWon board = any wholeLine board || any wholeLine (transpose board)
