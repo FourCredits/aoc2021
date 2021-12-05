@@ -5,9 +5,10 @@ import qualified Day1 as D1
 import qualified Day2 as D2
 import qualified Day3 as D3
 import qualified Day4 as D4
+import qualified Day5 as D5
 
 main :: IO Counts
-main = runTestTT $ TestList [day1, day2, day3, day4]
+main = runTestTT $ TestList [day1, day2, day3, day4, day5]
 
 withInput :: FilePath -> (String -> a) -> (a -> Assertion) -> Assertion
 withInput file parser action = action . parser =<< readFile file
@@ -105,3 +106,41 @@ day4 =
         , [(2, False), (0, False), (12, False), (3, False), (7, False)]
         ]
       ]
+
+day5 :: Test
+day5 =
+  "day 5 tests" ~:
+  TestList
+    [ "parsing" ~: example @=? D5.parser parseEx
+    , "part 1 example" ~: 5 @=? D5.part1 example
+    , "part 2 example" ~: 12 @=? D5.part2 example
+    , "real deal" ~: withInput "resources/5.txt" D5.parser $ \i -> do
+        7438 @=? D5.part1 i
+        21406 @=? D5.part2 i
+    ]
+  where
+    example =
+      [ ((0, 9), (5, 9))
+      , ((8, 0), (0, 8))
+      , ((9, 4), (3, 4))
+      , ((2, 2), (2, 1))
+      , ((7, 0), (7, 4))
+      , ((6, 4), (2, 0))
+      , ((0, 9), (2, 9))
+      , ((3, 4), (1, 4))
+      , ((0, 0), (8, 8))
+      , ((5, 5), (8, 2))
+      ]
+    parseEx =
+      unlines
+        [ "0,9 -> 5,9"
+        , "8,0 -> 0,8"
+        , "9,4 -> 3,4"
+        , "2,2 -> 2,1"
+        , "7,0 -> 7,4"
+        , "6,4 -> 2,0"
+        , "0,9 -> 2,9"
+        , "3,4 -> 1,4"
+        , "0,0 -> 8,8"
+        , "5,5 -> 8,2"
+        ]
