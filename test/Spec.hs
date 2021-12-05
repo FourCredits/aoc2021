@@ -17,8 +17,8 @@ day1 :: Test
 day1 =
   "day 1 tests" ~:
   TestList
-    [ "part 1 example" ~: 7 ~=? D1.part1 testData
-    , "part 2 example" ~: 5 ~=? D1.part2 testData
+    [ "part 1 example" ~: 7 @=? D1.part1 testData
+    , "part 2 example" ~: 5 @=? D1.part2 testData
     , "real deal" ~: withInput "resources/1.txt" D1.parse $ \i -> do
         1581 @=? D1.part1 i
         1618 @=? D1.part2 i
@@ -30,9 +30,9 @@ day2 :: Test
 day2 =
   "day 2 tests" ~:
   TestList
-    [ "parsing" ~: parseEx ~=? D2.parse strEx
-    , "part 1 example" ~: 150 ~=? D2.part1 parseEx
-    , "part 2 example" ~: 900 ~=? D2.part2 parseEx
+    [ "parsing" ~: parseEx @=? D2.parse strEx
+    , "part 1 example" ~: 150 @=? D2.part1 parseEx
+    , "part 2 example" ~: 900 @=? D2.part2 parseEx
     , "real deal" ~: withInput "resources/2.txt" D2.parse $ \i -> do
         1727835 @=? D2.part1 i
         1544000595 @=? D2.part2 i
@@ -47,8 +47,8 @@ day3 :: Test
 day3 =
   "day 3 tests" ~:
   TestList
-    [ "part 1 example" ~: 198 ~=? D3.part1 example
-    , "part 2 example" ~: 230 ~=? D3.part2 example
+    [ "part 1 example" ~: 198 @=? D3.part1 example
+    , "part 2 example" ~: 230 @=? D3.part2 example
     , "real deal" ~: withInput "resources/3.txt" D3.parse $ \i -> do
         4138664 @=? D3.part1 i
         4273224 @=? D3.part2 i
