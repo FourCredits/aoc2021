@@ -40,13 +40,7 @@ day2 =
     ]
   where
     parseEx =
-      [ (D2.Forward 5)
-      , (D2.Down 5)
-      , (D2.Forward 8)
-      , (D2.Up 3)
-      , (D2.Down 8)
-      , (D2.Forward 2)
-      ]
+      [D2.Forward 5, D2.Down 5, D2.Forward 8, D2.Up 3, D2.Down 8, D2.Forward 2]
     strEx = "forward 5\ndown 5\nforward 8\nup 3\ndown 8\nforward 2"
 
 day3 :: Test
