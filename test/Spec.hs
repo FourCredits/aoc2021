@@ -1,14 +1,15 @@
+import qualified Data.Map.Strict as M
 import Test.HUnit
-import Control.Monad
 
 import qualified Day1 as D1
 import qualified Day2 as D2
 import qualified Day3 as D3
 import qualified Day4 as D4
 import qualified Day5 as D5
+import qualified Day6 as D6
 
 main :: IO Counts
-main = runTestTT $ TestList [day1, day2, day3, day4, day5]
+main = runTestTT $ TestList [day1, day2, day3, day4, day5, day6]
 
 withInput :: FilePath -> (String -> a) -> (a -> Assertion) -> Assertion
 withInput file parser action = action . parser =<< readFile file
@@ -165,3 +166,21 @@ day5 =
         , "0,0 -> 8,8"
         , "5,5 -> 8,2"
         ]
+
+day6 :: Test
+day6 =
+  "day 6 tests" ~:
+  TestList
+    [ "parsing"               ~: example     @=? D6.parser parseInput
+    , "part 1 example simple" ~: 26          @=? D6.simulateFish 18 example
+    , "part 1 example"        ~: 5934        @=? D6.part1 example
+    , "part 2 example"        ~: 26984457539 @=? D6.part2 example
+    , "real deal" ~: withInput "resources/6.txt" D6.parser $ \i -> do
+        360268 @=? D6.part1 i
+        1632146183902 @=? D6.part2 i
+    ]
+  where
+    example =
+      M.fromAscList
+        [(0, 0), (1, 1), (2, 1), (3, 2), (4, 1), (5, 0), (6, 0), (7, 0), (8, 0)]
+    parseInput = "3,4,3,1,2"
