@@ -6,20 +6,19 @@ import Data.Either
 import Data.List
 import Text.Parsec
 
-type Board = [[(Int, Bool)]]
+import Utils
 
-mkBoard :: [[Int]] -> Board
-mkBoard = map (map (, False))
+type Board = [[(Int, Bool)]]
 
 parser :: String -> ([Int], [Board])
 parser = fromRight ([], []) . parse input ""
   where
     input = (,) <$> chosenNumbers <*> boards
-    chosenNumbers = sepBy num (char ',') <* count 2 endOfLine
-    num = read <$> many1 digit
-    boards = sepEndBy board endOfLine
+    chosenNumbers = sepByCommas num <* count 2 endOfLine
+    boards = sepEndByNewLines board
     board = mkBoard <$> count 5 (line <* endOfLine)
     line = count 5 (many (char ' ') *> num)
+    mkBoard = map (map (, False))
 
 hasWon :: Board -> Bool
 hasWon board = any wholeLine board || any wholeLine (transpose board)
@@ -37,10 +36,6 @@ calculateScore :: Board -> Int
 calculateScore board = sum (map fst $ filter (not . snd) $ concat board)
 
 part1 :: [Int] -> [Board] -> Int
--- part1 (n:ns) boards
---   | Just board <- find hasWon boards = calculateScore n board
---   | otherwise = part1 ns $ map (update n) boards
-
 part1 (n:ns) boards =
   case map (update n) boards of
     boards'

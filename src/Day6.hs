@@ -14,10 +14,10 @@ type Day = Integer
 type Fish = Integer
 
 parser :: String -> Map Fish Integer
-parser = countFish . fromRight [] . parse input ""
+parser = countFish . doAParse (sepByCommas num) []
   where
-    input = sepBy num (char ',')
     countFish = M.fromListWith (+) . (zeroCounts ++) . map (, 1)
+    -- We need to have a zero at 0 to 8 for changes to propagate correctly
     zeroCounts = [(i, 0) | i <- [0 .. 8]]
 
 simulateFish :: Day -> Map Fish Integer -> Integer

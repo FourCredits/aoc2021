@@ -8,17 +8,17 @@ import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as M
 import Text.Parsec hiding (Line)
 
+import Utils
+
 type Position = (Int, Int)
 type Line = (Position, Position)
 
 parser :: String -> [Line]
-parser = fromRight [] . parse input ""
+parser = doAParse input []
   where
-    input = sepEndBy line endOfLine
-    line = pairSep position (string " -> ")
-    position = pairSep num (char ',')
-    pairSep p sep = (,) <$> (p <* sep) <*> p
-    num = read <$> many1 digit
+    input = sepEndByNewLines line
+    line = sepPair position (string " -> ")
+    position = sepPair num (char ',')
 
 expandLine :: Line -> [Position]
 expandLine ((x1, y1), (x2, y2))
