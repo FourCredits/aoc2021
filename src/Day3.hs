@@ -11,7 +11,7 @@ parse = lines
 part1 :: [String] -> Int
 part1 ns = gamma * epsilon
   where
-    gamma = foldBits $ map moreCommon $ transpose ns
+    gamma   = foldBits $ map moreCommon $ transpose ns
     epsilon = foldBits $ map lessCommon $ transpose ns
 
 part2 :: [String] -> Int

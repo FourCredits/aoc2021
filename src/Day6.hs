@@ -25,7 +25,7 @@ simulateFish stop = go 0
   where
     go days fish
       | days == stop = sum $ M.elems fish
-      | otherwise = go (days + 1) $ M.foldrWithKey update M.empty fish
+      | otherwise    = go (days + 1) $ M.foldrWithKey update M.empty fish
     update 0 v map = M.insertWith (+) 8 v $ M.insertWith (+) 6 v map
     update k v map = M.insertWith (+) (k - 1) v map
 

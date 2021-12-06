@@ -13,12 +13,12 @@ type Board = [[(Int, Bool)]]
 parser :: String -> ([Int], [Board])
 parser = fromRight ([], []) . parse input ""
   where
-    input = (,) <$> chosenNumbers <*> boards
+    input         = (,) <$> chosenNumbers <*> boards
     chosenNumbers = sepByCommas num <* count 2 endOfLine
-    boards = sepEndByNewLines board
-    board = mkBoard <$> count 5 (line <* endOfLine)
-    line = count 5 (many (char ' ') *> num)
-    mkBoard = map (map (, False))
+    boards        = sepEndByNewLines board
+    board         = mkBoard <$> count 5 (line <* endOfLine)
+    line          = count 5 (many (char ' ') *> num)
+    mkBoard       = map (map (, False))
 
 hasWon :: Board -> Bool
 hasWon board = any wholeLine board || any wholeLine (transpose board)
@@ -30,7 +30,7 @@ update drawnNumber = map (map f)
   where
     f (number, marked)
       | number == drawnNumber = (number, True)
-      | otherwise = (number, marked)
+      | otherwise             = (number, marked)
     
 calculateScore :: Board -> Int
 calculateScore board = sum (map fst $ filter (not . snd) $ concat board)
@@ -40,10 +40,10 @@ part1 (n:ns) boards =
   case map (update n) boards of
     boards'
       | Just board <- find hasWon boards' -> n * calculateScore board
-      | otherwise -> part1 ns boards'
+      | otherwise                         -> part1 ns boards'
 
 part2 :: [Int] -> [Board] -> Int
 part2 (n:ns) boards =
   case map (update n) boards of
     [board] | hasWon board -> n * calculateScore board
-    boards' -> part2 ns $ filter (not . hasWon) boards'
+    boards'                -> part2 ns $ filter (not . hasWon) boards'
