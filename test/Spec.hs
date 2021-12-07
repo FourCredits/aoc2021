@@ -7,9 +7,10 @@ import qualified Day3 as D3
 import qualified Day4 as D4
 import qualified Day5 as D5
 import qualified Day6 as D6
+import qualified Day7 as D7
 
 main :: IO Counts
-main = runTestTT $ TestList [day1, day2, day3, day4, day5, day6]
+main = runTestTT $ TestList [day1, day2, day3, day4, day5, day6, day7]
 
 withInput :: FilePath -> (String -> a) -> (a -> Assertion) -> Assertion
 withInput file parser action = action . parser =<< readFile file
@@ -183,3 +184,17 @@ day6 =
       M.fromAscList
         [(0, 0), (1, 1), (2, 1), (3, 2), (4, 1), (5, 0), (6, 0), (7, 0), (8, 0)]
     parseInput = "3,4,3,1,2"
+
+day7 :: Test
+day7 =
+  "day 7 tests" ~:
+  TestList
+    [ "part 1 example" ~: 37 @=? D7.part1 example
+    , "part 2 example" ~: 168 @=? D7.part2 example
+    , "triangle numbers" ~: [1, 3, 6, 10] @=? map D7.triangle [1 .. 4]
+    , "real deal" ~: withInput "resources/7.txt" D7.parser $ \i -> do
+        344735 @=? D7.part1 i
+        96798233 @=? D7.part2 i
+    ]
+  where
+    example = [16, 1, 2, 0, 4, 2, 7, 1, 2, 14]
