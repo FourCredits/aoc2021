@@ -8,9 +8,10 @@ import qualified Day4 as D4
 import qualified Day5 as D5
 import qualified Day6 as D6
 import qualified Day7 as D7
+import qualified Day8 as D8
 
 main :: IO Counts
-main = runTestTT $ TestList [day1, day2, day3, day4, day5, day6, day7]
+main = runTestTT $ TestList [day1, day2, day3, day4, day5, day6, day7, day8]
 
 withInput :: FilePath -> (String -> a) -> (a -> Assertion) -> Assertion
 withInput file parser action = action . parser =<< readFile file
@@ -198,3 +199,52 @@ day7 =
     ]
   where
     example = [16, 1, 2, 0, 4, 2, 7, 1, 2, 14]
+
+day8 :: Test
+day8 =
+  "day 8 tests" ~:
+  TestList
+    [ "parsing - basic" ~: simpleExample @=? D8.parser singleLine
+    , "parsing - example" ~: example @=? D8.parser exampleString
+    , "part 1 example" ~: 26 @=? D8.part1 example
+    , "seven seg translating" ~: 1234 @=?
+      D8.readSevenSeg ["fc", "acdeg", "acdfg", "bcdf"]
+    , "part 2 simple example" ~: 5353 @=? D8.part2 simpleExample
+    , "part 2 example" ~: 61229 @=? D8.part2 example
+    , "real deal" ~: withInput "resources/8.txt" D8.parser $ \i -> do
+        344 @=? D8.part1 i
+        1048410 @=? D8.part2 i
+    ]
+  where
+    singleLine =
+      "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"
+    simpleExample =
+      [ ( [ "acedgfb" , "cdfbe" , "gcdfa" , "fbcad" , "dab"
+          , "cefabd" , "cdfgeb" , "eafb" , "cagedb" , "ab" ]
+        , ["cdfeb", "fcadb", "cdfeb", "cdbaf"])
+      ]
+    exampleString =
+      unlines
+        [ "be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe"
+        , "edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc"
+        , "fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg"
+        , "fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd cedba gadfec cb"
+        , "aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga | gecf egdcabf bgf bfgea"
+        , "fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf | gebdcfa ecba ca fadegcb"
+        , "dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbcadfe"
+        , "bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef"
+        , "egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb"
+        , "gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce"
+        ]
+    example =
+      [ (["be", "cfbegad", "cbdgef", "fgaecd", "cgeb", "fdcge", "agebfd", "fecdb", "fabcd", "edb"] , ["fdgacbe", "cefdb", "cefbgd", "gcbe"])
+      , (["edbfga", "begcd", "cbg", "gc", "gcadebf", "fbgde", "acbgfd", "abcde", "gfcbed", "gfec"] , ["fcgedb", "cgb", "dgebacf", "gc"])
+      , (["fgaebd", "cg", "bdaec", "gdafb", "agbcfd", "gdcbef", "bgcad", "gfac", "gcb", "cdgabef"] , ["cg", "cg", "fdcagb", "cbg"])
+      , (["fbegcd", "cbd", "adcefb", "dageb", "afcb", "bc", "aefdc", "ecdab", "fgdeca", "fcdbega"] , ["efabcd", "cedba", "gadfec", "cb"])
+      , (["aecbfdg", "fbg", "gf", "bafeg", "dbefa", "fcge", "gcbea", "fcaegb", "dgceab", "fcbdga"] , ["gecf", "egdcabf", "bgf", "bfgea"])
+      , (["fgeab", "ca", "afcebg", "bdacfeg", "cfaedg", "gcfdb", "baec", "bfadeg", "bafgc", "acf"] , ["gebdcfa", "ecba", "ca", "fadegcb"])
+      , (["dbcfg", "fgd", "bdegcaf", "fgec", "aegbdf", "ecdfab", "fbedc", "dacgb", "gdcebf", "gf"] , ["cefg", "dcbef", "fcge", "gbcadfe"])
+      , (["bdfegc", "cbegaf", "gecbf", "dfcage", "bdacg", "ed", "bedf", "ced", "adcbefg", "gebcd"] , ["ed", "bcgafe", "cdgba", "cbgef"])
+      , (["egadfb", "cdbfeg", "cegd", "fecab", "cgb", "gbdefca", "cg", "fgcdab", "egfdb", "bfceg"] , ["gbdfcae", "bgc", "cg", "cgb"])
+      , (["gcafb", "gcf", "dcaebfg", "ecagb", "gf", "abcdeg", "gaef", "cafbge", "fdbac", "fegbdc"] , ["fgae", "cfgab", "fg", "bagce"])
+      ]

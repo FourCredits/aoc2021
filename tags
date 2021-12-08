@@ -1,0 +1,98 @@
+Board	src/Day4.hs	11;"	t
+Candidate	src/Day8.hs	11;"	t
+Day	src/Day6.hs	12;"	t
+Down	src/Day2.hs	11;"	d
+Fish	src/Day6.hs	14;"	t
+Forward	src/Day2.hs	9;"	d
+Instruction	src/Day2.hs	8;"	t
+Line	src/Day5.hs	14;"	t
+Parser	src/Utils.hs	6;"	t
+Pattern	src/Day8.hs	9;"	t
+Position	src/Day5.hs	13;"	t
+Up	src/Day2.hs	10;"	d
+bindir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	32;"	v	file:
+calculateScore	src/Day4.hs	36;"	v
+catchIO	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	26;"	v	file:
+countOverlaps	src/Day5.hs	41;"	v
+createMapping	src/Day8.hs	114;"	v
+datadir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	35;"	v	file:
+day1	/home/erik/Projects/aoc2021/test/Spec.hs	20;"	v	file:
+day2	/home/erik/Projects/aoc2021/test/Spec.hs	33;"	v	file:
+day3	/home/erik/Projects/aoc2021/test/Spec.hs	49;"	v	file:
+day4	/home/erik/Projects/aoc2021/test/Spec.hs	75;"	v	file:
+day5	/home/erik/Projects/aoc2021/test/Spec.hs	134;"	v	file:
+day6	/home/erik/Projects/aoc2021/test/Spec.hs	172;"	v	file:
+day7	/home/erik/Projects/aoc2021/test/Spec.hs	190;"	v	file:
+day8	/home/erik/Projects/aoc2021/test/Spec.hs	204;"	v	file:
+doAParse	src/Utils.hs	9;"	v
+dynlibdir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	34;"	v	file:
+expandLine	src/Day5.hs	24;"	v
+expandLine'	src/Day5.hs	32;"	v
+findBest	src/Day3.hs	42;"	v
+fitPattern	src/Day8.hs	97;"	v
+foldBits	src/Day3.hs	24;"	v
+getBinDir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	40;"	v
+getDataDir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	43;"	v
+getDataFileName	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	48;"	v
+getDynLibDir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	42;"	v
+getLibDir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	41;"	v
+getLibexecDir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	44;"	v
+getSysconfDir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	45;"	v
+hasWon	src/Day4.hs	24;"	v
+isSubsetOf	src/Day8.hs	100;"	v
+lessCommon	src/Day3.hs	36;"	v
+libdir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	33;"	v	file:
+libexecdir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	36;"	v	file:
+lookup'	src/Day8.hs	28;"	v
+main	/home/erik/Projects/aoc2021/test/Spec.hs	14;"	v
+moreCommon	src/Day3.hs	30;"	v
+nakedSubsets	src/Day8.hs	71;"	v
+num	src/Utils.hs	12;"	v
+parse	src/Day1.hs	4;"	v
+parse	src/Day2.hs	15;"	v
+parse	src/Day3.hs	9;"	v
+parser	src/Day4.hs	14;"	v
+parser	src/Day5.hs	17;"	v
+parser	src/Day6.hs	17;"	v
+parser	src/Day7.hs	6;"	v
+parser	src/Day8.hs	14;"	v
+part1	src/Day1.hs	7;"	v
+part1	src/Day2.hs	23;"	v
+part1	src/Day3.hs	12;"	v
+part1	src/Day4.hs	39;"	v
+part1	src/Day5.hs	44;"	v
+part1	src/Day6.hs	33;"	v
+part1	src/Day7.hs	23;"	v
+part1	src/Day8.hs	21;"	v
+part2	src/Day1.hs	15;"	v
+part2	src/Day2.hs	30;"	v
+part2	src/Day3.hs	18;"	v
+part2	src/Day4.hs	46;"	v
+part2	src/Day5.hs	47;"	v
+part2	src/Day6.hs	36;"	v
+part2	src/Day7.hs	26;"	v
+part2	src/Day8.hs	128;"	v
+patternMatchCandidates	src/Day8.hs	86;"	v
+patternMatchPattern	src/Day8.hs	103;"	v
+possibilities	src/Day8.hs	94;"	v
+powerSet	src/Day8.hs	55;"	v
+powerSet'	src/Day8.hs	61;"	v
+readSevenSeg	src/Day8.hs	34;"	v
+sepByCommas	src/Utils.hs	15;"	v
+sepByNewLines	src/Utils.hs	21;"	v
+sepEndByNewLines	src/Utils.hs	18;"	v
+sepPair	src/Utils.hs	24;"	v
+sevenSegTable	src/Day8.hs	38;"	v
+simpleFuelCost	src/Day7.hs	9;"	v
+simulateFish	src/Day6.hs	24;"	v
+slidingWindow	src/Day1.hs	10;"	v
+smallestCost	src/Day7.hs	19;"	v
+sysconfdir	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	37;"	v	file:
+translate	src/Day8.hs	31;"	v
+triangle	src/Day7.hs	12;"	v
+unions	src/Day8.hs	68;"	v
+update	src/Day4.hs	29;"	v
+update	src/Day8.hs	52;"	v
+updatedFuelCost	src/Day7.hs	15;"	v
+version	/home/erik/Projects/aoc2021/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.2.1.0/build/aoc2021-test/autogen/Paths_aoc2021.hs	29;"	v
+withInput	/home/erik/Projects/aoc2021/test/Spec.hs	17;"	v	file:
