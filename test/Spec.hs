@@ -1,3 +1,5 @@
+import Control.Monad
+import Data.Array.IArray
 import qualified Data.Map.Strict as M
 import Test.HUnit
 
@@ -9,9 +11,11 @@ import qualified Day5 as D5
 import qualified Day6 as D6
 import qualified Day7 as D7
 import qualified Day8 as D8
+import qualified Day9 as D9
 
-main :: IO Counts
-main = runTestTT $ TestList [day1, day2, day3, day4, day5, day6, day7, day8]
+main :: IO ()
+main = void $ runTestTT $ TestList days
+  where days = [day1, day2, day3, day4, day5, day6, day7, day8, day9]
 
 withInput :: FilePath -> (String -> a) -> (a -> Assertion) -> Assertion
 withInput file parser action = action . parser =<< readFile file
@@ -248,3 +252,33 @@ day8 =
       , (["egadfb", "cdbfeg", "cegd", "fecab", "cgb", "gbdefca", "cg", "fgcdab", "egfdb", "bfceg"] , ["gbdfcae", "bgc", "cg", "cgb"])
       , (["gcafb", "gcf", "dcaebfg", "ecagb", "gf", "abcdeg", "gaef", "cafbge", "fdbac", "fegbdc"] , ["fgae", "cfgab", "fg", "bagce"])
       ]
+
+day9 :: Test
+day9 =
+  "day 9 tests" ~:
+  TestList
+    [ "parsing"        ~: example @=? D9.parser parserExample
+    , "part 1 example" ~: 15      @=? D9.part1  example
+    , "part 2 example" ~: 1134    @=? D9.part2  example
+    , "real deal" ~: withInput "resources/9.txt" D9.parser $ \i -> do
+        452 @=? D9.part1 i
+        1263735 @=? D9.part2 i
+    ]
+  where
+    example =
+      listArray
+        ((1, 1), (5, 10))
+        [ 2, 1, 9, 9, 9, 4, 3, 2, 1, 0
+        , 3, 9, 8, 7, 8, 9, 4, 9, 2, 1
+        , 9, 8, 5, 6, 7, 8, 9, 8, 9, 2
+        , 8, 7, 6, 7, 8, 9, 6, 7, 8, 9
+        , 9, 8, 9, 9, 9, 6, 5, 6, 7, 8
+        ]
+    parserExample =
+      unlines
+        [ "2199943210"
+        , "3987894921"
+        , "9856789892"
+        , "8767896789"
+        , "9899965678"
+        ]

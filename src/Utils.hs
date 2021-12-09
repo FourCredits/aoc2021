@@ -1,6 +1,9 @@
+{-# LANGUAGE TupleSections #-}
+
 module Utils where
 
 import Data.Either
+import qualified Data.Map.Strict as M
 import Text.Parsec
 
 type Parser = Parsec String ()
@@ -22,3 +25,8 @@ sepByNewLines p = sepBy p endOfLine
 
 sepPair :: Parser p -> Parser sep -> Parser (p, p)
 sepPair p sep = (,) <$> (p <* sep) <*> p
+
+-- Takes a list of values, and returns a map relating each value in the list to
+-- the number of times it appeared in the list
+counter :: (Ord a) => [a] -> M.Map a Int
+counter coll = M.fromListWith (+) $ map (, 1) coll
