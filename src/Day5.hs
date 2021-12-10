@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 module Day5 where
 
 import Data.Either
@@ -38,7 +36,7 @@ expandLine' line@((x1, y1), (x2, y2))
     n    = abs (x2 - x1) + 1 -- This should be the same as abs (y2 - y1) + 1
 
 countOverlaps :: (Ord a) => [a] -> Int
-countOverlaps = length . M.filter (> 1) . M.fromListWith (+) . map (, 1)
+countOverlaps = length . M.filter (> 1) . counter
 
 part1 :: [Line] -> Int
 part1 = countOverlaps . concatMap expandLine

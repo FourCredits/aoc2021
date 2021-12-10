@@ -35,15 +35,17 @@ update drawnNumber = map (map f)
 calculateScore :: Board -> Int
 calculateScore board = sum (map fst $ filter (not . snd) $ concat board)
 
-part1 :: [Int] -> [Board] -> Int
-part1 (n:ns) boards =
+part1 :: ([Int], [Board]) -> Int
+part1 ([], _) = undefined
+part1 (n:ns, boards) =
   case map (update n) boards of
     boards'
       | Just board <- find hasWon boards' -> n * calculateScore board
-      | otherwise                         -> part1 ns boards'
+      | otherwise                         -> part1 (ns, boards')
 
-part2 :: [Int] -> [Board] -> Int
-part2 (n:ns) boards =
+part2 :: ([Int], [Board]) -> Int
+part2 ([], _) = undefined
+part2 (n:ns, boards) =
   case map (update n) boards of
     [board] | hasWon board -> n * calculateScore board
-    boards'                -> part2 ns $ filter (not . hasWon) boards'
+    boards'                -> part2 (ns, filter (not . hasWon) boards')

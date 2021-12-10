@@ -11,8 +11,8 @@ data Instruction
   | Down Int
   deriving (Show, Eq)
 
-parse :: String -> [Instruction]
-parse = doAParse (sepEndByNewLines instruction) []
+parser :: String -> [Instruction]
+parser = doAParse (sepEndByNewLines instruction) []
   where
     instruction = forward <|> up <|> down
     forward     = Forward <$> (string "forward " *> num)

@@ -1,7 +1,7 @@
 module Day1 where
 
-parse :: String -> [Int]
-parse = map read . lines
+parser :: String -> [Int]
+parser = map read . lines
 
 part1 :: [Int] -> Int
 part1 ns = length $ filter id $ zipWith (<) ns (tail ns)

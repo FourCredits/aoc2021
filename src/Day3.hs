@@ -5,9 +5,6 @@ import Data.Bits
 import Data.Function
 import Data.List
 
-parse :: String -> [String]
-parse = lines
-
 part1 :: [String] -> Int
 part1 ns = gamma * epsilon
   where

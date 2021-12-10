@@ -7,7 +7,6 @@ import Data.Function
 import Data.List
 import Data.Maybe 
 import qualified Data.Map.Strict as M
-import Debug.Trace
 
 import Utils
 
@@ -44,7 +43,8 @@ isAdjacent (x, y) (x', y') =
 
 lowPoints :: DepthMap -> [Location]
 lowPoints dm = filter p $ assocs dm
-  where p (pos, depth) = all ((> depth) . snd) $ adjacentPositions dm pos
+  where
+    p (pos, depth) = all ((> depth) . snd) $ adjacentPositions dm pos
 
 groupByLowPoints :: DepthMap -> [Int]
 groupByLowPoints dm =
@@ -56,4 +56,4 @@ groupByLowPoints dm =
       | loc `elem` lps = Just loc
       | lowers@(_:_) <- filter ((< depth) . snd) $ adjacentPositions dm pos =
         flowsTo $ minimumBy (compare `on` snd) lowers
-      | otherwise = error "I don't think this is supposed to happen"
+      | otherwise = Nothing
