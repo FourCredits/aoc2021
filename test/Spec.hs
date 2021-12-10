@@ -12,10 +12,11 @@ import qualified Day6 as D6
 import qualified Day7 as D7
 import qualified Day8 as D8
 import qualified Day9 as D9
+import qualified Day10 as D10
 
 main :: IO ()
 main = void $ runTestTT $ TestList days
-  where days = [day1, day2, day3, day4, day5, day6, day7, day8, day9]
+  where days = [day1, day2, day3, day4, day5, day6, day7, day8, day9, day10]
 
 withInput :: FilePath -> (String -> a) -> (a -> Assertion) -> Assertion
 withInput file parser action = action . parser =<< readFile file
@@ -282,3 +283,47 @@ day9 =
         , "8767896789"
         , "9899965678"
         ]
+
+day10 :: Test
+day10 =
+  "day 10 tests" ~:
+  TestList
+    [ "part 1" ~:
+      TestList
+        [ "full example" ~: 26397 @=? D10.part1 example
+        , 1197    ~=? D10.scoreOfLine (example !! 2)
+        , 3       ~=? D10.scoreOfLine (example !! 4)
+        , 57      ~=? D10.scoreOfLine (example !! 5)
+        , 3       ~=? D10.scoreOfLine (example !! 7)
+        , 25137   ~=? D10.scoreOfLine (example !! 8)
+        ]
+    , "part 2" ~:
+      TestList
+        [ "full example" ~: 288957 @=? D10.part2 example
+        , "median" ~: 5 @=? D10.median [5, 1, 20, -200, 6]
+        , "closing characters" ~:
+          TestList
+            [ "}}]])})]"  ~=? D10.closingChars (head example)
+            , ")}>]})"    ~=? D10.closingChars (example !! 1)
+            , "}}>}>))))" ~=? D10.closingChars (example !! 3)
+            , "]]}}]}]}>" ~=? D10.closingChars (example !! 6)
+            , "])}>"      ~=? D10.closingChars (example !! 9)
+            ]
+        ]
+    , "real deal" ~: withInput "resources/10.txt" lines $ \i -> do
+        345441 @=? D10.part1 i
+        3235371166 @=? D10.part2 i
+    ]
+  where
+    example =
+      [ "[({(<(())[]>[[{[]{<()<>>"
+      , "[(()[<>])]({[<{<<[]>>("
+      , "{([(<{}[<>[]}>{[]{[(<()>"
+      , "(((({<>}<{<{<>}{[]{[]{}"
+      , "[[<[([]))<([[{}[[()]]]"
+      , "[{[{({}]{}}([{[{{{}}([]"
+      , "{<[[]]>}<{[{[{[]{()[[[]"
+      , "[<(<(<(<{}))><([]([]()"
+      , "<{([([[(<>()){}]>(<<{{"
+      , "<{([{{}}[<[[[<>{}]]]>[]]"
+      ]
