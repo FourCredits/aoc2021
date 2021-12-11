@@ -1,57 +1,30 @@
+{-# LANGUAGE TupleSections #-}
+
 module Day11 where
 
 import Control.Arrow
 import Data.Array.IArray
-import Data.Char
-import Data.Maybe
+import Data.List
 
 import Utils
 
--- TODO: extract this commonality from day 9
-
-parser :: String -> Array Position Int
+parser :: String -> Grid Int
 parser = parseBlockOfNums
 
-part1 :: Array Position Int -> Int
-part1 = simulateN 100
+part1 :: Grid Int -> Int
+part1 = fst . simulateN 100 (\(n, g) -> first (+ n) $ step g) . (0, )
 
-part2 :: Array Position Int -> Int
-part2 = go 0
-  where
-    go n grid
-      | all (== 0) grid = n
-      | otherwise       = go (n + 1) (snd $ step grid)
+part2 :: Grid Int -> Int
+part2 = length . takeWhile (any (/= 0) . snd) . iterate (step . snd) . (0,)
 
-simulateN :: Int -> Array Position Int -> Int
-simulateN = go 0
+step :: Grid Int -> (Int, Grid Int)
+step originalGrid = second resetFlashed $ flash [] $ fmap (+ 1) originalGrid
   where
-    go acc 0 grid = acc
-    go acc n grid =
-      let (flashed, grid') = step grid
-       in go (acc + flashed) (n - 1) grid'
-
-step :: Array Position Int -> (Int, Array Position Int)
-step originalGrid = h $ g $ fmap (+ 1) originalGrid
-  where
-    bds = bounds originalGrid
-    g = go []
-      where
-        go flashed grid =
-          let octopuses = assocs grid
-           in case map fst $
-                   filter (\(p, v) -> p `notElem` flashed && v > 9) octopuses of
-                [] -> grid
-                xs ->
-                  let flashed' = xs ++ flashed
-                      toUpdate = concatMap adjacents xs
-                   in go flashed' (update grid toUpdate)
-        update = foldr (\pos grid -> grid // [(pos, 1 + (grid ! pos))])
-        adjacents (y, x) =
-          [ (y', x')
-          | x' <- [x - 1 .. x + 1]
-          , y' <- [y - 1 .. y + 1]
-          , inRange bds (y', x')
-          ]
-    h grid =
-      let flashed = filter ((> 9) . snd) $ assocs grid
-       in (length flashed, grid // map (second (const 0)) flashed)
+    flash flashed grid
+      | xs@(_:_) <- map fst $ filter (flashing flashed) $ assocs grid =
+        flash (xs `union` flashed) (update grid $ concatMap (adjacents bs) xs)
+      | otherwise = (length flashed, grid)
+    resetFlashed grid = fmap (\v -> if v > 9 then 0 else v) grid
+    flashing alreadyFlashed (pos, val) = pos `notElem` alreadyFlashed && val > 9
+    update = foldr (\pos grid -> grid // [(pos, 1 + (grid ! pos))])
+    bs = bounds originalGrid

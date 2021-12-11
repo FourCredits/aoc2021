@@ -20,9 +20,6 @@ main = void $ runTestTT $ TestList days
   where
     days = [day1, day2, day3, day4, day5, day6, day7, day8, day9, day10, day11]
 
-withInput :: FilePath -> (String -> a) -> (a -> Assertion) -> Assertion
-withInput file parser action = action . parser =<< readFile file
-
 realDeal ::
      (Eq b, Show b)
   => FilePath
@@ -338,17 +335,13 @@ day11 =
     , "part 1" ~:
       TestList
         [ "single step"        ~: (0, step1)          @=? D11.step example 
-        , "steps with flashes" ~: 35                  @=? D11.simulateN 2 example
         , "simple example"     ~: (9, simpleExample') @=? D11.step simpleExample
         , "full example"       ~: 1656                @=? D11.part1 example
         ]
     , "part 2" ~: 195 @=? D11.part2 example
-    , "real deal" ~: withInput "resources/11.txt" D11.parser $ \i -> do
-        1675 @=? D11.part1 i
-        515  @=? D11.part2 i
+    , realDeal "resources/11.txt" D11.parser (D11.part1, 1675) (D11.part2, 515)
     ]
     where
-      step1, step2, example, simpleExample :: Array (Int, Int) Int
       simpleExample =
         listArray
           ((1, 1), (5, 5))
@@ -380,20 +373,6 @@ day11 =
           , 7, 9, 9, 3, 9, 9, 2, 2, 4, 5
           , 5, 9, 5, 7, 9, 5, 9, 6, 6, 5
           , 6, 3, 9, 4, 8, 6, 2, 6, 3, 7
-          ]
-      step2 =
-        listArray
-          ((1, 1), (10, 10))
-          [ 8, 8, 0, 7, 4, 7, 6, 5, 5, 5
-          , 5, 0, 8, 9, 0, 8, 7, 0, 5, 4
-          , 8, 5, 9, 7, 8, 8, 9, 6, 0, 8
-          , 8, 4, 8, 5, 7, 6, 9, 6, 0, 0
-          , 8, 7, 0, 0, 9, 0, 8, 8, 0, 0
-          , 6, 6, 0, 0, 0, 8, 8, 9, 8, 9
-          , 6, 8, 0, 0, 0, 0, 5, 9, 4, 3
-          , 0, 0, 0, 0, 0, 0, 7, 4, 5, 6
-          , 9, 0, 0, 0, 0, 0, 0, 8, 7, 6
-          , 8, 7, 0, 0, 0, 0, 6, 8, 4, 8
           ]
       example =
         listArray

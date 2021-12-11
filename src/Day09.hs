@@ -12,7 +12,7 @@ import Utils
 
 type Depth = Int
 type Location = (Position, Depth)
-type DepthMap = Array Position Depth
+type DepthMap = Grid Depth
 
 parser :: String -> DepthMap
 parser = parseBlockOfNums

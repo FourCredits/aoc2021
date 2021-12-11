@@ -1,8 +1,6 @@
 module Day03 where
 
-import Control.Applicative
 import Data.Bits
-import Data.Function
 import Data.List
 
 part1 :: [String] -> Int
@@ -22,6 +20,7 @@ foldBits = foldl' f 0
   where
     f n '1' = shiftL n 1 .|. 1
     f n '0' = shiftL n 1 .|. 0
+    f _ _ = undefined
 
 moreCommon :: [Char] -> Char
 moreCommon line =
