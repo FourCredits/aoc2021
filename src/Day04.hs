@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module Day4 where
+module Day04 where
 
 import Data.Either
 import Data.List

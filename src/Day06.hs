@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module Day6 where
+module Day06 where
 
 import Data.Either
 import Data.Map.Strict (Map)

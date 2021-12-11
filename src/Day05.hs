@@ -1,4 +1,4 @@
-module Day5 where
+module Day05 where
 
 import Data.Either
 import Data.List
@@ -8,8 +8,7 @@ import Text.Parsec hiding (Line)
 
 import Utils
 
-type Position = (Int, Int)
-type Line     = (Position, Position)
+type Line = (Position, Position)
 
 parser :: String -> [Line]
 parser = doAParse input []

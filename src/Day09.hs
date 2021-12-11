@@ -1,4 +1,4 @@
-module Day9 where
+module Day09 where
 
 import Control.Monad
 import Data.Array.IArray
@@ -10,25 +10,20 @@ import qualified Data.Map.Strict as M
 
 import Utils
 
-type Point = (Int, Int)
 type Depth = Int
-type Location = (Point, Depth)
-type DepthMap = Array Point Depth
+type Location = (Position, Depth)
+type DepthMap = Array Position Depth
 
 parser :: String -> DepthMap
-parser s = listArray ((1, 1), (h, w)) $ concat parseResult
-  where
-    h = length parseResult
-    w = length $ head parseResult
-    parseResult = map (map (\c -> ord c - ord '0')) $ lines s
+parser = parseBlockOfNums
 
 part1 :: DepthMap -> Int
-part1 = sum . map ((+ 1) . snd) . lowPoints
+part1 = sum . map ((+ 1) . snd) . lowPositions
 
 part2 :: DepthMap -> Int
-part2 = product . take 3 . sortBy (flip compare) . groupByLowPoints
+part2 = product . take 3 . sortBy (flip compare) . groupByLowPositions
 
-adjacentPositions :: DepthMap -> Point -> [Location]
+adjacentPositions :: DepthMap -> Position -> [Location]
 adjacentPositions dm (x, y) =
   [ (position, dm ! position)
   | position <- [(x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)]
@@ -37,20 +32,20 @@ adjacentPositions dm (x, y) =
   where
     bds = bounds dm
 
-isAdjacent :: Point -> Point -> Bool
+isAdjacent :: Position -> Position -> Bool
 isAdjacent (x, y) (x', y') =
   x == x' && abs (y' - y) < 1 || y == y' && abs (x' - x) < 1
 
-lowPoints :: DepthMap -> [Location]
-lowPoints dm = filter p $ assocs dm
+lowPositions :: DepthMap -> [Location]
+lowPositions dm = filter p $ assocs dm
   where
     p (pos, depth) = all ((> depth) . snd) $ adjacentPositions dm pos
 
-groupByLowPoints :: DepthMap -> [Int]
-groupByLowPoints dm =
+groupByLowPositions :: DepthMap -> [Int]
+groupByLowPositions dm =
   map snd $ M.toAscList $ counter $ mapMaybe flowsTo $ assocs dm
   where
-    lps = lowPoints dm
+    lps = lowPositions dm
     flowsTo loc@(pos, depth) 
       | depth == 9 = Nothing
       | loc `elem` lps = Just loc
