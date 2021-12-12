@@ -5,7 +5,9 @@ import Debug.Trace
 
 import Utils
 
-type Input = [(String, String)]
+type Input = [Edge]
+type Edge = (String, String)
+type Predicate = [String] -> Edge -> Bool
 
 parser :: String -> Input
 parser = concatMap f . lines
@@ -33,25 +35,16 @@ part2 input = length $ findEnd p input ["start"]
         noSmallCaveVisistedTwice =
           all (== 1) $ counter $ filter isSmallCave path
 
--- TODO: create helper function for the 'input' variable
-
-findEnd ::
-     ([String] -> (String, String) -> Bool) -> Input -> [String] -> [[String]]
--- findEnd p input path@("end":_) = [path]
--- findEnd p input path@(c:cs) =
---   concatMap (findEnd p input) $ nextSteps p input path
--- findEnd _ _ [] = undefined
+findEnd :: Predicate -> Input -> [String] -> [[String]]
 findEnd p input = go
   where
     go [] = undefined
     go path@("end":_) = [path]
     go path = concatMap go $ nextSteps p input path
 
-nextSteps ::
-     ([String] -> (String, String) -> Bool) -> Input -> [String] -> [[String]]
+nextSteps :: Predicate -> Input -> [String] -> [[String]]
 nextSteps p input [] = undefined
-nextSteps p input path@(c:_) =
-  map ((: path) . snd) $ filter (p path) input
+nextSteps p input path@(c:_) = map ((: path) . snd) $ filter (p path) input
 
 isBigCave :: String -> Bool
 isBigCave []    = undefined
