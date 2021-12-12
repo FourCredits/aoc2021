@@ -17,22 +17,23 @@ import qualified Day11 as D11
 import qualified Day12 as D12
 
 main :: IO ()
-main = void $ runTestTT $ TestList days
+main = void $ runTestTT days
   where
     days =
-      [ day1
-      , day2
-      , day3
-      , day4
-      , day5
-      , day6
-      , day7
-      , day8
-      , day9
-      , day10
-      , day11
-      , day12
-      ]
+      TestList
+        [ day1
+        , day2
+        , day3
+        , day4
+        , day5
+        , day6
+        , day7
+        , day8
+        , day9
+        , day10
+        , day11
+        , day12
+        ]
 
 realDeal ::
      (Eq b, Show b)
@@ -416,107 +417,71 @@ day11 =
           , "5283751526"
           ]
 
+
 day12 :: Test
 day12 =
   "day 12 tests" ~:
   TestList
-    [ "parsing" ~:
+    [ "part 1" ~:
       TestList
-        [ "single line" ~: [("start", "A"), ("A", "start")] @=?
-          D12.parser "start-A"
-        ]
-    , "part 1" ~:
-      TestList
-        [ "small example" ~: 10 @=? D12.part1 smallExample
-        , "bigger example" ~: 19 @=? D12.part1 biggerExample
-        , "biggest example" ~: 226 @=? D12.part1 biggestExample
+        [ "small"  ~: 10  @=? D12.part1 small
+        , "medium" ~: 19  @=? D12.part1 medium
+        , "large"  ~: 226 @=? D12.part1 large
         ]
     , "part 2" ~:
       TestList
-        [ "small example" ~: 36 @=? D12.part2 smallExample
-        , "bigger example" ~: 103 @=? D12.part2 biggerExample
-        , "biggest example" ~: 3509 @=? D12.part2 biggestExample
+        [ "small"  ~: 36   @=? D12.part2 small
+        , "medium" ~: 103  @=? D12.part2 medium
+        , "large"  ~: 3509 @=? D12.part2 large
         ]
     , realDeal
         "resources/12.txt"
         D12.parser
         (D12.part1, 5920)
         (D12.part2, 155477)
-    ]
+    ] 
   where
-    smallExample =
-      [ ("start", "A")
-      , ("A", "start")
-      , ("start", "b")
-      , ("b", "start")
-      , ("A", "c")
-      , ("c", "A")
-      , ("A", "b")
-      , ("b", "A")
-      , ("b", "d")
-      , ("d", "b")
-      , ("A", "end")
-      , ("end", "A")
-      , ("b", "end")
-      , ("end", "b")
-      ]
-    biggerExample =
-      [ ("dc", "end")
-      , ("end", "dc")
-      , ("HN", "start")
-      , ("start", "HN")
-      , ("start", "kj")
-      , ("kj", "start")
-      , ("dc", "start")
-      , ("start", "dc")
-      , ("dc", "HN")
-      , ("HN", "dc")
-      , ("LN", "dc")
-      , ("dc", "LN")
-      , ("HN", "end")
-      , ("end", "HN")
-      , ("kj", "sa")
-      , ("sa", "kj")
-      , ("kj", "HN")
-      , ("HN", "kj")
-      , ("kj", "dc")
-      , ("dc", "kj")
-      ]
-    biggestExample =
-      [ ("fs", "end")
-      , ("end", "fs")
-      , ("he", "DX")
-      , ("DX", "he")
-      , ("fs", "he")
-      , ("he", "fs")
-      , ("start", "DX")
-      , ("DX", "start")
-      , ("pj", "DX")
-      , ("DX", "pj")
-      , ("end", "zg")
-      , ("zg", "end")
-      , ("zg", "sl")
-      , ("sl", "zg")
-      , ("zg", "pj")
-      , ("pj", "zg")
-      , ("pj", "he")
-      , ("he", "pj")
-      , ("RW", "he")
-      , ("he", "RW")
-      , ("fs", "DX")
-      , ("DX", "fs")
-      , ("pj", "RW")
-      , ("RW", "pj")
-      , ("zg", "RW")
-      , ("RW", "zg")
-      , ("start", "pj")
-      , ("pj", "start")
-      , ("he", "WI")
-      , ("WI", "he")
-      , ("zg", "he")
-      , ("he", "zg")
-      , ("pj", "fs")
-      , ("fs", "pj")
-      , ("start", "RW")
-      , ("RW", "start")
-      ]
+    small =
+      D12.parser $ unlines
+        [ "start-A"
+        , "start-b"
+        , "A-c"
+        , "A-b"
+        , "b-d"
+        , "A-end"
+        , "b-end"
+        ]
+    medium =
+      D12.parser $ unlines
+        [ "dc-end"
+        , "HN-start"
+        , "start-kj"
+        , "dc-start"
+        , "dc-HN"
+        , "LN-dc"
+        , "HN-end"
+        , "kj-sa"
+        , "kj-HN"
+        , "kj-dc"
+        ]
+    large =
+      D12.parser $ unlines
+        [ "fs-end"
+        , "he-DX"
+        , "fs-he"
+        , "start-DX"
+        , "pj-DX"
+        , "end-zg"
+        , "zg-sl"
+        , "zg-pj"
+        , "pj-he"
+        , "RW-he"
+        , "fs-DX"
+        , "pj-RW"
+        , "zg-RW"
+        , "start-pj"
+        , "he-WI"
+        , "zg-he"
+        , "pj-fs"
+        , "start-RW"
+        ]
