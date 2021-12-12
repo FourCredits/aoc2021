@@ -14,11 +14,25 @@ import qualified Day08 as D08
 import qualified Day09 as D09
 import qualified Day10 as D10
 import qualified Day11 as D11
+import qualified Day12 as D12
 
 main :: IO ()
 main = void $ runTestTT $ TestList days
   where
-    days = [day1, day2, day3, day4, day5, day6, day7, day8, day9, day10, day11]
+    days =
+      [ day1
+      , day2
+      , day3
+      , day4
+      , day5
+      , day6
+      , day7
+      , day8
+      , day9
+      , day10
+      , day11
+      , day12
+      ]
 
 realDeal ::
      (Eq b, Show b)
@@ -401,3 +415,108 @@ day11 =
           , "4846848554"
           , "5283751526"
           ]
+
+day12 :: Test
+day12 =
+  "day 12 tests" ~:
+  TestList
+    [ "parsing" ~:
+      TestList
+        [ "single line" ~: [("start", "A"), ("A", "start")] @=?
+          D12.parser "start-A"
+        ]
+    , "part 1" ~:
+      TestList
+        [ "small example" ~: 10 @=? D12.part1 smallExample
+        , "bigger example" ~: 19 @=? D12.part1 biggerExample
+        , "biggest example" ~: 226 @=? D12.part1 biggestExample
+        ]
+    , "part 2" ~:
+      TestList
+        [ "small example" ~: 36 @=? D12.part2 smallExample
+        , "bigger example" ~: 103 @=? D12.part2 biggerExample
+        , "biggest example" ~: 3509 @=? D12.part2 biggestExample
+        ]
+    , realDeal
+        "resources/12.txt"
+        D12.parser
+        (D12.part1, 5920)
+        (D12.part2, 155477)
+    ]
+  where
+    smallExample =
+      [ ("start", "A")
+      , ("A", "start")
+      , ("start", "b")
+      , ("b", "start")
+      , ("A", "c")
+      , ("c", "A")
+      , ("A", "b")
+      , ("b", "A")
+      , ("b", "d")
+      , ("d", "b")
+      , ("A", "end")
+      , ("end", "A")
+      , ("b", "end")
+      , ("end", "b")
+      ]
+    biggerExample =
+      [ ("dc", "end")
+      , ("end", "dc")
+      , ("HN", "start")
+      , ("start", "HN")
+      , ("start", "kj")
+      , ("kj", "start")
+      , ("dc", "start")
+      , ("start", "dc")
+      , ("dc", "HN")
+      , ("HN", "dc")
+      , ("LN", "dc")
+      , ("dc", "LN")
+      , ("HN", "end")
+      , ("end", "HN")
+      , ("kj", "sa")
+      , ("sa", "kj")
+      , ("kj", "HN")
+      , ("HN", "kj")
+      , ("kj", "dc")
+      , ("dc", "kj")
+      ]
+    biggestExample =
+      [ ("fs", "end")
+      , ("end", "fs")
+      , ("he", "DX")
+      , ("DX", "he")
+      , ("fs", "he")
+      , ("he", "fs")
+      , ("start", "DX")
+      , ("DX", "start")
+      , ("pj", "DX")
+      , ("DX", "pj")
+      , ("end", "zg")
+      , ("zg", "end")
+      , ("zg", "sl")
+      , ("sl", "zg")
+      , ("zg", "pj")
+      , ("pj", "zg")
+      , ("pj", "he")
+      , ("he", "pj")
+      , ("RW", "he")
+      , ("he", "RW")
+      , ("fs", "DX")
+      , ("DX", "fs")
+      , ("pj", "RW")
+      , ("RW", "pj")
+      , ("zg", "RW")
+      , ("RW", "zg")
+      , ("start", "pj")
+      , ("pj", "start")
+      , ("he", "WI")
+      , ("WI", "he")
+      , ("zg", "he")
+      , ("he", "zg")
+      , ("pj", "fs")
+      , ("fs", "pj")
+      , ("start", "RW")
+      , ("RW", "start")
+      ]
