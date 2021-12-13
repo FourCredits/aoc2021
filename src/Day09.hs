@@ -24,13 +24,8 @@ part2 :: DepthMap -> Int
 part2 = product . take 3 . sortBy (flip compare) . groupByLowPositions
 
 adjacentPositions :: DepthMap -> Position -> [Location]
-adjacentPositions dm (x, y) =
-  [ (position, dm ! position)
-  | position <- [(x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)]
-  , inRange bds position
-  ]
-  where
-    bds = bounds dm
+adjacentPositions dm pos = [(pos', dm ! pos') | pos' <- strictAdjacents bs pos]
+  where bs = bounds dm
 
 isAdjacent :: Position -> Position -> Bool
 isAdjacent (x, y) (x', y') =

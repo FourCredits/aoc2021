@@ -30,7 +30,10 @@ sepByNewLines :: Parser p -> Parser [p]
 sepByNewLines p = sepBy p endOfLine
 
 sepPair :: Parser p -> Parser sep -> Parser (p, p)
-sepPair p sep = (,) <$> (p <* sep) <*> p
+sepPair p = sepTwo p p
+
+sepTwo :: Parser a -> Parser b -> Parser sep -> Parser (a, b)
+sepTwo a b sep = (,) <$> (a <* sep) <*> b
 
 -- 2-dimensions
 ---------------
@@ -53,6 +56,10 @@ adjacents bs (y, x) =
   , (y', x') /= (y, x)
   , inRange bs (y', x')
   ]
+
+strictAdjacents :: (Position, Position) -> Position -> [Position]
+strictAdjacents bs (x, y) =
+  filter (inRange bs) [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
 
 readPos :: String -> Position
 readPos s =
