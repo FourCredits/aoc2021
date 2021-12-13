@@ -38,9 +38,6 @@ sepPair p sep = (,) <$> (p <* sep) <*> p
 type Position = (Int, Int)
 type Grid = Array Position
 
-singleDigit :: Char -> Int
-singleDigit c = ord c - ord '0'
-
 parseBlockOfNums :: String -> Grid Int
 parseBlockOfNums s = listArray ((1, 1), (h, w)) $ concat parseResult
   where
@@ -57,6 +54,11 @@ adjacents bs (y, x) =
   , inRange bs (y', x')
   ]
 
+readPos :: String -> Position
+readPos s =
+  let (a, ',':b) = break (== ',') s
+   in (read a, read b)
+
 -- Other misc stuff
 -------------------
 
@@ -64,6 +66,9 @@ adjacents bs (y, x) =
 -- the number of times it appeared in the list
 counter :: (Ord a) => [a] -> M.Map a Int
 counter coll = M.fromListWith (+) $ map (, 1) coll
+
+singleDigit :: Char -> Int
+singleDigit c = ord c - ord '0'
 
 unions :: (Eq a) => [[a]] -> [a]
 unions = foldr union []
