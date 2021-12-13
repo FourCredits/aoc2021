@@ -3,10 +3,10 @@ module Day09 where
 import Control.Monad
 import Data.Array.IArray
 import Data.Char
-import Data.Function
 import Data.List
-import Data.Maybe 
 import qualified Data.Map.Strict as M
+import Data.Maybe
+import Data.Ord
 
 import Utils
 
@@ -45,5 +45,5 @@ groupByLowPositions dm =
       | depth == 9 = Nothing
       | loc `elem` lps = Just loc
       | lowers@(_:_) <- filter ((< depth) . snd) $ adjacentPositions dm pos =
-        flowsTo $ minimumBy (compare `on` snd) lowers
+        flowsTo $ minimumBy (comparing snd) lowers
       | otherwise = Nothing
