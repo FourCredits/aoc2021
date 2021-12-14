@@ -20,6 +20,12 @@ doAParse p def = fromRight def . parse p ""
 num :: (Num p) => Parser p
 num = fromIntegral . read <$> many1 digit
 
+anyString :: Parser String
+anyString = many1 letter
+
+doubleEndLine :: Parser String
+doubleEndLine = count 2 endOfLine
+
 sepByCommas :: Parser p -> Parser [p]
 sepByCommas p = sepBy p (char ',')
 
