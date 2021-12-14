@@ -12,8 +12,16 @@ import qualified Day09 as D09
 import qualified Day10 as D10
 import qualified Day11 as D11
 import qualified Day12 as D12
+import qualified Day13 as D13
+import qualified Day14 as D14
 
-runDay :: (Show b) => FilePath -> (String -> a) -> (a -> b) -> (a -> b) -> IO ()
+runDay ::
+     (Show b, Show c)
+  => FilePath
+  -> (String -> a)
+  -> (a -> b)
+  -> (a -> c)
+  -> IO ()
 runDay filepath parse part1 part2 = do
   input <- parse <$> readFile filepath
   print $ part1 input
@@ -33,3 +41,5 @@ main = do
   runDay "resources/10.txt"      lines D10.part1 D10.part2
   runDay "resources/11.txt" D11.parser D11.part1 D11.part2
   runDay "resources/12.txt" D12.parser D12.part1 D12.part2
+  runDay "resources/13.txt" D13.parser D13.part1 D13.part3
+  runDay "resources/14.txt" D14.parser D14.part1 D14.part4

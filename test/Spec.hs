@@ -16,6 +16,7 @@ import qualified Day10 as D10
 import qualified Day11 as D11
 import qualified Day12 as D12
 import qualified Day13 as D13
+import qualified Day14 as D14
 
 main :: IO ()
 main = void $ runTestTT days
@@ -35,14 +36,15 @@ main = void $ runTestTT days
         , day11
         , day12
         , day13
+        , day14
         ]
 
 realDeal ::
-     (Eq b, Show b)
+     (Eq b, Show b, Eq c, Show c)
   => FilePath
   -> (String -> a)
   -> (a -> b, b)
-  -> (a -> b, b)
+  -> (a -> c, c)
   -> Test
 realDeal file parser (p1, a1) (p2, a2) =
   "real deal" ~: do
@@ -419,7 +421,6 @@ day11 =
           , "5283751526"
           ]
 
-
 day12 :: Test
 day12 =
   "day 12 tests" ~:
@@ -545,4 +546,61 @@ day13 =
         , ""
         , "fold along y=7"
         , "fold along x=5"
+        ]
+
+day14 :: Test
+day14 =
+  "day 14 tests" ~:
+  TestList
+    [ "parsing" ~: example @=? D14.parser parseEx
+    , "part 1 example" ~: 1588 @=? D14.part1 example
+    , "part 2 example" ~: 2188189693529 @=? D14.part2 example
+    , realDeal
+        "resources/14.txt"
+        D14.parser
+        (D14.part1, 5656)
+        (D14.part2, 12271437788530)
+    ]
+  where
+    example = (polymer, rules)
+    polymer = "NNCB"
+    rules = 
+      M.fromList
+        [ (('C', 'H'), 'B')
+        , (('H', 'H'), 'N')
+        , (('C', 'B'), 'H')
+        , (('N', 'H'), 'C')
+        , (('H', 'B'), 'C')
+        , (('H', 'C'), 'B')
+        , (('H', 'N'), 'C')
+        , (('N', 'N'), 'C')
+        , (('B', 'H'), 'H')
+        , (('N', 'C'), 'B')
+        , (('N', 'B'), 'B')
+        , (('B', 'N'), 'B')
+        , (('B', 'B'), 'N')
+        , (('B', 'C'), 'B')
+        , (('C', 'C'), 'N')
+        , (('C', 'N'), 'C')
+        ]
+    parseEx =
+      unlines
+        [ "NNCB"
+        , ""
+        , "CH -> B"
+        , "HH -> N"
+        , "CB -> H"
+        , "NH -> C"
+        , "HB -> C"
+        , "HC -> B"
+        , "HN -> C"
+        , "NN -> C"
+        , "BH -> H"
+        , "NC -> B"
+        , "NB -> B"
+        , "BN -> B"
+        , "BB -> N"
+        , "BC -> B"
+        , "CC -> N"
+        , "CN -> C"
         ]
