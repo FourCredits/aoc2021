@@ -1,24 +1,22 @@
 module Day08 where
 
-import Control.Arrow
 import Control.Monad
+import Data.Bifunctor
 import Data.Maybe
 import Data.Function
 import Data.List
 
-type Pattern = String
+import Utils.Misc
 
+type Pattern = String
 type Candidate = (Char, String)
 
 parser :: String -> [([Pattern], [Pattern])]
-parser = map parseLine . lines
-  where
-    parseLine = (words *** (tail . words)) . break (== '|')
+parser = map (second tail . break (== "|") . words) . lines
 
 part1 :: [([Pattern], [Pattern])] -> Int
 part1 ls = sum $ map (countUniques . snd) ls
-  where
-    countUniques = length . filter ((`elem` [2, 3, 4, 7]) . length)
+  where countUniques = length . filter ((`elem` [2, 3, 4, 7]) . length)
 
 part2 :: [([Pattern], [Pattern])] -> Int
 part2 entries = sum $ map calculateOutputValue entries
@@ -141,10 +139,6 @@ isSubsetOf as bs = all (`elem` bs) as
 possibilities :: [[a]] -> [[a]]
 possibilities = foldr (\x acc -> (:) <$> x <*> acc) [[]]
 
--- A right fold over `Data.List.union`.
-unions :: (Eq a) => [[a]] -> [a]
-unions = foldr union []
-
 -- Updates the first assoc list with values from the second. The ordering is not
 -- preserved.
 update :: (Eq a) => [(a, b)] -> [(a, b)] -> [(a, b)]
@@ -152,20 +146,3 @@ update original updates = unionBy ((==) `on` fst) updates original
 
 lookup' :: (Eq a) => [(a, b)] -> a -> b
 lookup' table k = fromJust $ lookup k table
-
--- Returns the power set of the input list: each possible subset of the input
--- list.
-powerSet :: [a] -> [[a]]
-powerSet [] = [[]]
-powerSet (x:xs) = map (x :) ps ++ ps
-  where
-    ps = powerSet xs
-
--- Returns the power set of the input list, minus the empty list and the input
--- list itself. Results are sorted on size.
-powerSet' :: [a] -> [[a]]
-powerSet' xs =
-  sortOn length $
-  filter (\set -> not (null set) && length set /= l) $ powerSet xs
-  where
-    l = length xs

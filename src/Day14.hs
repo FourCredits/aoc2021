@@ -1,10 +1,10 @@
 module Day14 where
 
 import Control.Monad.State
+import Data.Bifunctor
 import qualified Data.Map.Strict as M
-import Text.Parsec hiding (State)
 
-import Utils
+import Utils.Parsing
 
 type Polymer  = String
 type CountMap = M.Map Char Int
@@ -13,11 +13,8 @@ type Rules    = M.Map (Char, Char) Char
 type Input    = (Polymer, Rules)
 
 parser :: String -> Input
-parser = doAParse p ([], M.empty)
-  where
-    p       = sepTwo anyString rules doubleEndLine
-    rules   = M.fromList <$> sepEndByNewLines rule
-    rule    = sepTwo ((,) <$> letter <*> letter) letter (string " -> ")
+parser = second (M.fromList . map rule . lines) . twoOf . splitOn "\n\n"
+  where rule s = let [[a, b], [c]] = splitOn " -> " s in ((a, b), c)
 
 part1 :: Input -> Int
 part1 = uncurry (-) . extrema . solve 10

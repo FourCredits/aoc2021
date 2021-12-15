@@ -1,7 +1,6 @@
 module Day10 where
 
 import Data.List
-import Debug.Trace
 
 part1 :: [String] -> Integer
 part1 = sum . map scoreOfLine

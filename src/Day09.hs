@@ -1,21 +1,20 @@
 module Day09 where
 
-import Control.Monad
 import Data.Array.IArray
-import Data.Char
 import Data.List
 import qualified Data.Map.Strict as M
 import Data.Maybe
 import Data.Ord
 
-import Utils
+import Utils.TwoD
+import Utils.Misc
 
 type Depth = Int
 type Location = (Position, Depth)
 type DepthMap = Grid Depth
 
 parser :: String -> DepthMap
-parser = parseBlockOfNums
+parser = mkGrid . map (map singleDigit) . lines
 
 part1 :: DepthMap -> Int
 part1 = sum . map ((+ 1) . snd) . lowPositions

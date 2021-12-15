@@ -4,18 +4,15 @@ import Data.Either
 import Data.List
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as M
-import Text.Parsec hiding (Line)
 
-import Utils
+import Utils.TwoD
+import Utils.Misc
+import Utils.Parsing
 
 type Line = (Position, Position)
 
 parser :: String -> [Line]
-parser = doAParse input []
-  where
-    input    = sepEndByNewLines line
-    line     = sepPair position (string " -> ")
-    position = sepPair num (char ',')
+parser = map (readPos `splitBy` " -> ") . lines
 
 expandLine :: Line -> [Position]
 expandLine ((x1, y1), (x2, y2))

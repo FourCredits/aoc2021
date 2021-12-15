@@ -4,7 +4,8 @@ import Data.Bifunctor
 import Data.Bool
 import Data.List
 
-import Utils
+import Utils.TwoD
+import Utils.Parsing
 
 data Fold
   = Horizontal Int
@@ -15,6 +16,14 @@ type Input = ([Position], [Fold])
 
 parser :: String -> Input
 parser = bimap (map readPos) (map readFold . tail) . break null . lines
+  where
+    readFold :: String -> Fold
+    readFold s =
+      case drop l s of
+          ('y':'=':n) -> Horizontal (read n)
+          ('x':'=':n) -> Vertical   (read n)
+          _           -> undefined
+    l = length "fold along "
 
 part1 :: Input -> Int
 part1 (positions, folds) = length $ performFold positions $ head folds
@@ -41,14 +50,6 @@ performFold ps (Vertical x) = nub $ map (first f) ps
       | x' < x = x'
       | x' > x = 2 * x - x'
       | otherwise = undefined
-
-readFold :: String -> Fold
-readFold s =
-  case drop l s of
-    ('y':'=':n) -> Horizontal (read n)
-    ('x':'=':n) -> Vertical   (read n)
-    _           -> undefined
-  where l = length "fold along "
 
 drawDots :: [Position] -> IO ()
 drawDots dots =

@@ -1,9 +1,6 @@
 module Day02 where
 
 import Data.List
-import Text.Parsec
-
-import Utils
 
 data Instruction
   = Forward Int
@@ -12,12 +9,14 @@ data Instruction
   deriving (Show, Eq)
 
 parser :: String -> [Instruction]
-parser = doAParse (sepEndByNewLines instruction) []
+parser = map instruction . lines
   where
-    instruction = forward <|> up <|> down
-    forward     = Forward <$> (string "forward " *> num)
-    up          = Up <$> (string "up " *> num)
-    down        = Down <$> (string "down " *> num)
+    instruction s =
+      case words s of
+        ["forward", n] -> Forward (read n)
+        ["up", n]      -> Up      (read n)
+        ["down", n]    -> Down    (read n)
+        _              -> undefined
 
 part1 :: [Instruction] -> Int
 part1 = uncurry (*) . foldl' f (0, 0)

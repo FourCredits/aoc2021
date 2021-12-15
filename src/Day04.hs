@@ -1,36 +1,28 @@
-{-# LANGUAGE TupleSections #-}
-
 module Day04 where
 
 import Data.Either
 import Data.List
-import Text.Parsec
 
-import Utils
+import Utils.Parsing
 
 type Board = [[(Int, Bool)]]
 
 parser :: String -> ([Int], [Board])
-parser = fromRight ([], []) . parse input ""
+parser s = (map read $ splitOn "," chosen, map parseBoard boards)
   where
-    input         = (,) <$> chosenNumbers <*> boards
-    chosenNumbers = sepByCommas num <* count 2 endOfLine
-    boards        = sepEndByNewLines board
-    board         = mkBoard <$> count 5 (line <* endOfLine)
-    line          = count 5 (many (char ' ') *> num)
-    mkBoard       = map (map (, False))
+    (chosen:boards) = splitOn "\n\n" s
+    parseBoard      = map (map (\n -> (read n, False)) . words) . lines
 
 hasWon :: Board -> Bool
 hasWon board = any wholeLine board || any wholeLine (transpose board)
-  where
-    wholeLine = all snd
+  where wholeLine = all snd
 
 update :: Int -> Board -> Board
-update drawnNumber = map (map f)
+update drawn = map (map f)
   where
     f (number, marked)
-      | number == drawnNumber = (number, True)
-      | otherwise             = (number, marked)
+      | number == drawn = (number, True)
+      | otherwise       = (number, marked)
     
 calculateScore :: Board -> Int
 calculateScore board = sum (map fst $ filter (not . snd) $ concat board)

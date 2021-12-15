@@ -5,7 +5,7 @@ import Data.Function
 import Data.Graph
 import Data.List
 
-import Utils
+import Utils.Misc
 
 type Input
    = (Graph, Vertex -> (String, String, [String]), String -> Maybe Vertex)
@@ -20,7 +20,7 @@ parser =
       let (a, '-':b) = break (== '-') s
        in [(a, b), (b, a)]
     g edges@((vertex, _):_) = (vertex, vertex, map snd edges)
-    g [] = undefined
+    g _ = undefined
 
 part1, part2 :: Input -> Int
 part1 = solve p1

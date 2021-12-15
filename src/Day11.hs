@@ -6,10 +6,11 @@ import Control.Arrow
 import Data.Array.IArray
 import Data.List
 
-import Utils
+import Utils.TwoD
+import Utils.Misc
 
 parser :: String -> Grid Int
-parser = parseBlockOfNums
+parser = mkGrid . map (map singleDigit) . lines
 
 part1 :: Grid Int -> Int
 part1 = fst . simulateN 100 (\(n, g) -> first (+ n) $ step g) . (0, )
