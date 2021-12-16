@@ -1,8 +1,5 @@
 module Day07 where
 
-import Data.List
-import Data.Ord
-
 import Utils.Parsing
 
 parser :: String -> [Int]

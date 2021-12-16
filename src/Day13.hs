@@ -5,7 +5,6 @@ import Data.Bool
 import Data.List
 
 import Utils.TwoD
-import Utils.Parsing
 
 data Fold
   = Horizontal Int

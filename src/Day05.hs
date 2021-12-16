@@ -1,7 +1,5 @@
 module Day05 where
 
-import Data.Either
-import Data.List
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as M
 

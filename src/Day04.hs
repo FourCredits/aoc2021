@@ -1,6 +1,5 @@
 module Day04 where
 
-import Data.Either
 import Data.List
 
 import Utils.Parsing

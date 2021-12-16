@@ -4,7 +4,6 @@ import Control.Arrow
 import Data.Bits
 import Data.List
 import qualified Data.Map.Strict as M
-import Debug.Trace
 
 type Parser a = [Bool] -> (a, [Bool])
 type Version = Int
