@@ -17,6 +17,7 @@ import qualified Day11 as D11
 import qualified Day12 as D12
 import qualified Day13 as D13
 import qualified Day14 as D14
+import qualified Day16 as D16
 
 main :: IO ()
 main = void $ runTestTT days
@@ -37,6 +38,7 @@ main = void $ runTestTT days
         , day12
         , day13
         , day14
+        , day16
         ]
 
 realDeal ::
@@ -604,3 +606,40 @@ day14 =
         , "CC -> N"
         , "CN -> C"
         ]
+
+
+day16 :: Test
+day16 =
+  "day 16 tests" ~:
+  TestList
+    [ "parsing" ~: example @=? D16.parser parseEx
+    , "part 1 parsing" ~:
+        (bitsParseEx, replicate 7 False) @=? bitsParser "38006F45291200"
+    , "part 1" ~: 31 @=? part1 "A0016C880162017C3686B18A3D4780"
+    , "part 2" ~:
+      TestList
+        [ "sum"          ~: 3  @=? part2 "C200B40A82"
+        , "product"      ~: 54 @=? part2 "04005AC33890"
+        , "minimum"      ~: 7  @=? part2 "880086C3E88112"
+        , "maximum"      ~: 9  @=? part2 "CE00C43D881120"
+        , "less than"    ~: 1  @=? part2 "D8005AC2A8F0"
+        , "greater than" ~: 0  @=? part2 "F600BC2D8F"
+        , "equal to"     ~: 0  @=? part2 "9C005AC2F8F0"
+        , "big one"      ~: 1  @=? part2 "9C0141080250320F1802104A08"
+        ]
+    , realDeal
+        "resources/16.txt"
+        D16.parser
+        (D16.part1, 991)
+        (D16.part2, 1264485568252)
+    ]
+  where
+    parseEx = "D2FE28"
+    example =
+      [ True, True, False, True, False, False, True, False, True, True, True
+      , True, True, True, True, False, False, False, True, False, True, False
+      , False , False ]
+    bitsParseEx = D16.Operator 1 6 [D16.Literal 6 10, D16.Literal 2 20]
+    bitsParser = D16.bitsParser . D16.parser
+    part1 = D16.part1 . D16.parser
+    part2 = D16.part2 . D16.parser
