@@ -8,3 +8,4 @@
 - [ ] add tuple sections as a project wide extension
 - [x] Complete package.yaml stuff like author name, etc.
 - [ ] Disable 'non-exhaustive pattern matching' error
+- [ ] split tests into different files
