@@ -14,6 +14,7 @@ import qualified Day11 as D11
 import qualified Day12 as D12
 import qualified Day13 as D13
 import qualified Day14 as D14
+import qualified Day15 as D15
 import qualified Day16 as D16
 import qualified Day17 as D17
 import qualified Day18 as D18
@@ -53,6 +54,7 @@ main = do
   runDay   "resources/12.txt" D12.parser          D12.part1  D12.part2
   runDayIO "resources/13.txt" D13.parser (print . D13.part1) D13.part2
   runDay   "resources/14.txt" D14.parser          D14.part1  D14.part2
+  runDay   "resources/15.txt" D15.parser          D15.part1  D15.part2
   runDay   "resources/16.txt" D16.parser          D16.part1  D16.part2
   runDay   "resources/17.txt" D17.parser          D17.part1  D17.part2
   runDay   "resources/18.txt" D18.parser          D18.part1  D18.part2

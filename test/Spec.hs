@@ -17,6 +17,7 @@ import qualified Day11 as D11
 import qualified Day12 as D12
 import qualified Day13 as D13
 import qualified Day14 as D14
+import qualified Day15 as D15
 import qualified Day16 as D16
 import qualified Day17 as D17
 import qualified Day18 as D18
@@ -611,6 +612,49 @@ day14 =
         , "CN -> C"
         ]
 
+day15 :: Test
+day15 =
+  "day 15 tests" ~:
+  TestList
+    [ "small examples" ~:
+      TestList
+        [ "part 1" ~: 2  @=? D15.lowestRisk example (10, 10) (9, 9)
+        , "part 2" ~:
+          TestList
+            [ 23 ~=? D15.lowestRisk example (50, 50) (50, 46)
+            , 16 ~=? D15.lowestRisk example (50, 50) (49, 49)
+            ]
+        ]
+    , "full examples" ~:
+      TestList
+        [ "part 1" ~:  40 @=? D15.part1 example
+        , "part 2" ~: 315 @=? D15.part2 example
+        ]
+    , "indexing" ~:
+      TestList
+        [ 8 ~=? example D15.!+ (10,  9) 
+        , 9 ~=? example D15.!+ (20,  9)
+        , 9 ~=? example D15.!+ (10, 19)
+        , 1 ~=? example D15.!+ (20, 19)
+        ]
+    -- part 2 isn't 2934
+    -- , realDeal "resources/15.txt" D15.parser (D15.part1, 583) (const 0, 0)
+    ]
+  where
+    example =
+      D15.parser $
+      unlines
+        [ "1163751742"
+        , "1381373672"
+        , "2136511328"
+        , "3694931569"
+        , "7463417111"
+        , "1319128137"
+        , "1359912421"
+        , "3125421639"
+        , "1293138521"
+        , "2311944581"
+        ]
 
 day16 :: Test
 day16 =
