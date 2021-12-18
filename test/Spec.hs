@@ -18,6 +18,7 @@ import qualified Day12 as D12
 import qualified Day13 as D13
 import qualified Day14 as D14
 import qualified Day16 as D16
+import qualified Day17 as D17
 
 main :: IO ()
 main = void $ runTestTT days
@@ -39,6 +40,7 @@ main = void $ runTestTT days
         , day13
         , day14
         , day16
+        , day17
         ]
 
 realDeal ::
@@ -643,3 +645,17 @@ day16 =
     bitsParser = D16.bitsParser . D16.parser
     part1 = D16.part1 . D16.parser
     part2 = D16.part2 . D16.parser
+
+day17 :: Test
+day17 =
+  "day 17 tests" ~:
+  TestList
+    [ "parsing" ~: example @=? D17.parser parseEx
+    , "part 1"  ~: 45      @=? D17.part1  example
+    , "part 2"  ~: 112     @=? D17.part2  example
+    , realDeal "resources/17.txt" D17.parser (D17.part1, 30628) (D17.part2, 0)
+    ]
+  where
+    parseEx = "target area: x=20..30, y=-10..-5"
+    example = ((20, 30), (-10, -5))
+
