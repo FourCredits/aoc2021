@@ -42,6 +42,7 @@ main = void $ runTestTT days
         , day14
         , day16
         , day17
+        , day18
         ]
 
 realDeal ::
