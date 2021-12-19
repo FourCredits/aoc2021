@@ -9,4 +9,5 @@
 - [x] Complete package.yaml stuff like author name, etc.
 - [ ] Disable 'non-exhaustive pattern matching' error
 - [ ] Split tests into different files
-- [ ] Finish Day 15
+- [x] Finish Day 15
+- [ ] Make Day 15 better - perhaps only use one data structure

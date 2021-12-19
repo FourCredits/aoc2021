@@ -621,7 +621,7 @@ day15 =
         [ "part 1" ~:  40 @=? D15.part1 example
         , "part 2" ~: 315 @=? D15.part2 example
         ]
-    , realDeal "resources/15.txt" D15.parser (D15.part1, 583) (D15.part2, 0)
+    , realDeal "resources/15.txt" D15.parser (D15.part1, 583) (D15.part2, 2927)
     ]
   where
     example =
