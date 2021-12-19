@@ -616,29 +616,12 @@ day15 :: Test
 day15 =
   "day 15 tests" ~:
   TestList
-    [ "small examples" ~:
-      TestList
-        [ "part 1" ~: 2  @=? D15.lowestRisk example (10, 10) (9, 9)
-        , "part 2" ~:
-          TestList
-            [ 23 ~=? D15.lowestRisk example (50, 50) (50, 46)
-            , 16 ~=? D15.lowestRisk example (50, 50) (49, 49)
-            ]
-        ]
-    , "full examples" ~:
+    [ "full examples" ~:
       TestList
         [ "part 1" ~:  40 @=? D15.part1 example
         , "part 2" ~: 315 @=? D15.part2 example
         ]
-    , "indexing" ~:
-      TestList
-        [ 8 ~=? example D15.!+ (10,  9) 
-        , 9 ~=? example D15.!+ (20,  9)
-        , 9 ~=? example D15.!+ (10, 19)
-        , 1 ~=? example D15.!+ (20, 19)
-        ]
-    -- part 2 isn't 2934
-    -- , realDeal "resources/15.txt" D15.parser (D15.part1, 583) (const 0, 0)
+    , realDeal "resources/15.txt" D15.parser (D15.part1, 583) (D15.part2, 0)
     ]
   where
     example =

@@ -1,60 +1,109 @@
+{-# LANGUAGE TupleSections #-}
+
 module Day15 where
 
 import Control.Monad.State
 import Data.Array.IArray
+import Data.Char
+import Data.Foldable
+import Data.Function
+import Data.List
 import qualified Data.Map.Strict as M
+import Data.Ord
 import Debug.Trace
 
 import Utils.TwoD
 import Utils.Misc
 
 type Input = Grid Int
-type Memo = M.Map (Position, Position) Int
+type Path = [Position]
 
 parser :: String -> Input
-parser = mkGrid . map (map singleDigit) . lines
+parser = mkGrid . map (map digitToInt) . lines
+
+data SState =
+  SState
+    { openSet  :: [Position] -- TODO: use better data type
+    , cameFrom :: M.Map Position Position
+    , gScore   :: M.Map Position Int
+    , fScore   :: M.Map Position Int
+    } deriving (Show, Eq, Ord)
+
+initState :: Position -> (Position -> Int) -> SState
+initState start h =
+  SState
+    { openSet = [start]
+    , cameFrom = M.empty
+    , gScore = M.singleton start 0
+    , fScore = M.singleton start (h start)
+    }
 
 part1 :: Input -> Int
-part1 input = lowestRisk input end start
-  where (start, end) = bounds input
+part1 = lowestRisk
 
 part2 :: Input -> Int
-part2 input = lowestRisk input (5 * x, 5 * y) start
-  where (start, (x, y)) = bounds input
+part2 = lowestRisk . expand (5, 5)
 
-next :: Position -> Position -> [Position]
-next (maxX, maxY) (x, y) =
-  filter (\(x', y') -> x' <= maxX && y' <= maxY) [(x, y + 1), (x + 1, y)]
+lowestRisk :: Input -> Int
+lowestRisk grid = sum $ map (grid !) $ aStar grid start end
+  where (start, end) = bounds grid
+
+expand :: (Int, Int) -> Input -> Input
+expand (a, b) grid = listArray bs' (map (grid !+) (range bs'))
+  where
+    bs@(start, (x, y)) = bounds grid
+    bs' = (start, (x * a, y * b))
 
 (!+) :: Input -> Position -> Int
-(!+) grid = go
+(!+) grid (a, b) = ((grid ! (a `wrap` x, b `wrap` y)) + aOff + bOff) `wrap` 9
   where
-    bs@(_ , (x', y')) = bounds grid
-    go pos@(x, y)
-      | x > x' = wrapAround 9 (1 + go (x - x', y))
-      | y > y' = wrapAround 9 (1 + go (x, y - y'))
-      | otherwise = grid ! pos
+    a `wrap` b = 1 + ((a - 1) `mod` b)
+    bs@(start, (x, y)) = bounds grid
+    aOff = (a - 1) `div` x
+    bOff = (b - 1) `div` y
 
-wrapAround :: Int -> Int -> Int
-wrapAround base n = 1 + ((n - 1) `mod` base)
+printGrid :: Input -> IO ()
+printGrid = mapM_ (print . map snd) . groupBy ((==) `on` (fst . fst)) . assocs
 
-lowestRisk :: Input -> Position -> Position -> Int
-lowestRisk grid end pos = evalState (go pos) M.empty
+aStar :: Input -> Position -> Position -> Path
+aStar grid start end@(endX, endY) = evalState search (initState start h)
   where
-    go :: Position -> State Memo Int
-    go start
-      | start == end = return 0
-      | otherwise = do
-        memo <- get
-        case memo M.!? (start, end) of
-          Just r -> return r
-          Nothing -> do
-            let positions' = next end start
-            costs <- mapM (\pos' -> ((grid !+ pos') +) <$> go pos') positions'
-            let result = minimum costs
-            modify (M.insert (start, end) result)
-            return result
+    h (x, y) = (endX - x) + (endY - y)
+    neighbours = strictAdjacents (bounds grid)
+    search = do
+      os <- gets openSet
+      if null os
+        then pure []
+        else do
+          st <- get
+          let current = minimumBy (comparing (fScore st M.!)) (openSet st)
+          put $ st {openSet = delete current os}
+          if current == end
+            then return $ reconstructPath (cameFrom st) current
+            else do
+              for_ (neighbours current) $ \neighbour -> do
+                gs <- gets gScore
+                let tentativeGScore = gs M.! current + grid ! neighbour
+                when (tentativeGScore < M.findWithDefault maxBound neighbour gs) $ do
+                  modify
+                    (\st ->
+                      let cf' = M.insert neighbour current (cameFrom st)
+                          gs' = M.insert neighbour tentativeGScore (gScore st)
+                          fs' = M.insert neighbour (tentativeGScore + h neighbour) (fScore st)
+                          os' = neighbour : openSet st
+                       in st { cameFrom = cf', gScore = gs', fScore = fs', openSet = os' })
+              search
 
+reconstructPath :: M.Map Position Position -> Position -> Path
+reconstructPath cameFrom = reverse . unfoldr (\pos -> (pos, ) <$> cameFrom M.!? pos)
+
+smolInput :: Input
+smolInput = parser "8"
+
+mediumInput :: Input
+mediumInput = parser "87\n43"
+
+example :: Input
 example =
   parser $
   unlines
