@@ -4,13 +4,14 @@ module Day11 where
 
 import Control.Arrow
 import Data.Array.IArray
+import Data.Char
 import Data.List
 
 import Utils.TwoD
 import Utils.Misc
 
 parser :: String -> Grid Int
-parser = mkGrid . map (map singleDigit) . lines
+parser = mkGrid . map (map digitToInt) . lines
 
 part1 :: Grid Int -> Int
 part1 = fst . simulateN 100 (\(n, g) -> first (+ n) $ step g) . (0, )

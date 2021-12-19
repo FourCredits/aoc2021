@@ -6,12 +6,6 @@ import Data.Char
 import Data.List
 import qualified Data.Map.Strict as M
 
--- Parses a single digit as a number i.e. '9' becomes 9
-singleDigit :: Char -> Int
-singleDigit c
-  | c `elem` ['0' .. '9'] = ord c - ord '0'
-  | otherwise             = undefined
-
 -- | Folds a list of a lists into a single list with Data.List.Union
 unions :: (Eq a) => [[a]] -> [a]
 unions = foldr union []

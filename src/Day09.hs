@@ -1,6 +1,7 @@
 module Day09 where
 
 import Data.Array.IArray
+import Data.Char
 import Data.List
 import qualified Data.Map.Strict as M
 import Data.Maybe
@@ -14,7 +15,7 @@ type Location = (Position, Depth)
 type DepthMap = Grid Depth
 
 parser :: String -> DepthMap
-parser = mkGrid . map (map singleDigit) . lines
+parser = mkGrid . map (map digitToInt) . lines
 
 part1 :: DepthMap -> Int
 part1 = sum . map ((+ 1) . snd) . lowPositions
