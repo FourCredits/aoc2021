@@ -1,5 +1,3 @@
--- {-# LANGUAGE TupleSections #-}
-
 module Day17 where
 
 import Control.Arrow

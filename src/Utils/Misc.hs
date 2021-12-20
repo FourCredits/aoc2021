@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 module Utils.Misc where
 
 import Data.Char

@@ -26,6 +26,8 @@ dependencies:
 
 library:
   source-dirs: src
+  default-extensions:
+    - TupleSections
 
 executables:
   aoc2021-exe:
