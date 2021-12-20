@@ -3,7 +3,7 @@ module Utils.Parsing where
 import Data.List
 import Data.Bifunctor
 
-splitOn :: String -> String -> [String]
+splitOn :: Eq a => [a] -> [a] -> [[a]]
 splitOn sep = go
   where
     go s
