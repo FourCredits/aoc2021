@@ -11,3 +11,4 @@
 - [ ] Split tests into different files
 - [x] Finish Day 15
 - [ ] Make Day 15 better - perhaps only use one data structure
+- [x] Make my own version of Day 19

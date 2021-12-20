@@ -45,6 +45,7 @@ library
       Day16
       Day17
       Day18
+      Day19
       Utils.Misc
       Utils.Parsing
       Utils.TwoD
