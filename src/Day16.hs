@@ -5,6 +5,8 @@ import Data.Bits
 import Data.List
 import qualified Data.Map.Strict as M
 
+import Utils.Misc
+
 type Parser a = [Bool] -> (a, [Bool])
 type Version = Int
 type Type = Int
@@ -59,12 +61,6 @@ evalPacket (Operator _ 6 ps) =
 evalPacket (Operator _ 7 ps) =
   let [a, b] = map evalPacket ps in if a == b then 1 else 0
 evalPacket _ = error "unknown type id"
-
-bitsToInt :: [Bool] -> Int
-bitsToInt = foldl' shift 0
-  where
-    shift n True  = shiftL n 1 .|. 1
-    shift n False = shiftL n 1 .|. 0
 
 -------------
 -- parsing --

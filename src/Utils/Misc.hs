@@ -1,5 +1,6 @@
 module Utils.Misc where
 
+import Data.Bits
 import Data.Char
 import Data.List
 import qualified Data.Map.Strict as M
@@ -32,3 +33,9 @@ powerSet' xs =
   filter (\set -> not (null set) && length set /= l) $ powerSet xs
   where
     l = length xs
+
+bitsToInt :: [Bool] -> Int
+bitsToInt = foldl' shift 0
+  where
+    shift n True  = shiftL n 1 .|. 1
+    shift n False = shiftL n 1 .|. 0

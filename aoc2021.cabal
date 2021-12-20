@@ -46,6 +46,7 @@ library
       Day17
       Day18
       Day19
+      Day20
       Utils.Misc
       Utils.Parsing
       Utils.TwoD
@@ -81,6 +82,26 @@ test-suite aoc2021-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Common
+      Day01Spec
+      Day02Spec
+      Day03Spec
+      Day04Spec
+      Day05Spec
+      Day06Spec
+      Day07Spec
+      Day08Spec
+      Day09Spec
+      Day10Spec
+      Day11Spec
+      Day12Spec
+      Day13Spec
+      Day14Spec
+      Day15Spec
+      Day16Spec
+      Day17Spec
+      Day18Spec
+      Day19Spec
       Paths_aoc2021
   hs-source-dirs:
       test
