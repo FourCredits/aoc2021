@@ -39,3 +39,6 @@ bitsToInt = foldl' shift 0
   where
     shift n True  = shiftL n 1 .|. 1
     shift n False = shiftL n 1 .|. 0
+
+wrap :: Integral a => a -> a -> a
+a `wrap` b = 1 + ((a - 1) `mod` b)

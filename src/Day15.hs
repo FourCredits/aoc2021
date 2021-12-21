@@ -11,6 +11,7 @@ import Data.STRef
 import qualified Data.Set as S
 
 import Utils.TwoD
+import Utils.Misc
 
 type Input = Grid Int
 type Path = [Position]
@@ -67,7 +68,6 @@ expand (a, b) grid = listArray bs' (map (grid !+) (range bs'))
 (!+) :: Input -> Position -> Int
 (!+) grid (a, b) = ((grid ! (a `wrap` x, b `wrap` y)) + aOff + bOff) `wrap` 9
   where
-    a `wrap` b = 1 + ((a - 1) `mod` b)
     bs@(start, (x, y)) = bounds grid
     aOff = (a - 1) `div` x
     bOff = (b - 1) `div` y
