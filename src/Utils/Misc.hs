@@ -42,3 +42,7 @@ bitsToInt = foldl' shift 0
 
 wrap :: Integral a => a -> a -> a
 a `wrap` b = 1 + ((a - 1) `mod` b)
+
+chunksOf :: Int -> [a] -> [[a]]
+chunksOf n [] = []
+chunksOf n xs = take n xs : chunksOf n (drop n xs)
