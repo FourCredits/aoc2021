@@ -1,77 +1,90 @@
 module Day22 where
 
-import Data.Array (range, inRange, Ix(..))
-import Data.List
--- import qualified Data.Map.Strict as M
-import qualified Data.Set as S
+import Control.Arrow
+import qualified Data.MultiSet as MS
+import Data.Maybe
 
 import Utils.Parsing
 
-data Position = P Int Int Int deriving (Show, Eq, Ord, Ix)
-data Action = On | Off deriving (Show, Eq, Ord)
-data RebootStep = RebootStep Action (Position, Position) deriving (Show, Eq)
-type Input = [RebootStep]
+newtype Span = Span (Int, Int) deriving (Eq, Ord)
+data Cuboid = Cuboid
+  { spanX :: Span
+  , spanY :: Span
+  , spanZ :: Span
+  } deriving (Eq, Ord)
+data EngineAction = On | Off
+data CuboidAction = CuboidAction EngineAction Cuboid
+data EngineState = EngineState
+  { add :: MS.MultiSet Cuboid
+  , subtract :: MS.MultiSet Cuboid
+  }
+type Input = [CuboidAction]
 
 parser :: String -> Input
-parser = map rebootStep . lines
+parser = map line . lines
   where
-    rebootStep s =
-      let [cubeConfigS, rangeS] = words s
-       in RebootStep (cubeConfig cubeConfigS) (boundingPoints rangeS)
-    cubeConfig "on"  = On
-    cubeConfig "off" = Off
-    cubeConfig _     = undefined
-    boundingPoints =
-      twoOf . map (\[a, b, c] -> P a b c) .
-      transpose . map (map read . splitOn ".." . drop 2) . splitOn ","
+    line = uncurry CuboidAction . (action *** cuboid) . twoOf . words
+    action "on"  = On
+    action "off" = Off
+    action _     = undefined
+    cuboid s =
+      let [x, y, z] = map span $ splitOn "," s
+       in Cuboid (Span x) (Span y) (Span z)
+    span = (read *** read) . twoOf . splitOn ".." . drop 2
 
-considerOnlyInitArea :: RebootStep -> RebootStep
-considerOnlyInitArea (RebootStep config (P a b c, P x y z)) =
-  RebootStep config (P (lo a) (lo b) (lo c), P (hi x) (hi y) (hi z))
-  where
-    hi = min 50
-    lo = max (-50)
-
--- part1 is 596598
 part1 :: Input -> Int
-part1 = S.size . foldl' f S.empty . map considerOnlyInitArea
+part1 = solve . take 20
 
-f :: S.Set Position -> RebootStep -> S.Set Position
-f acc (RebootStep On  r) = acc `S.union` S.fromAscList (range r)
-f acc (RebootStep Off r) = acc S.\\ S.fromAscList (range r)
-initProcArea = S.fromAscList $ range ((P (-50) (-50) (-50),) (P 50 50 50))
+part2 :: Input -> Int
+part2 = solve
 
-testData :: Input
-testData = parser parseEx
+solve :: [CuboidAction] -> Int
+solve =
+  cardinalityEngine .
+  foldl (\es cs -> gcEngine $ applyAction cs es) nullEngineState
 
-testData2 :: Input
-testData2 = parser
-  "on x=-20..26,y=-36..17,z=-47..7\n\
-  \on x=-20..33,y=-21..23,z=-26..28\n\
-  \on x=-22..28,y=-29..23,z=-38..16\n\
-  \on x=-46..7,y=-6..46,z=-50..-1\n\
-  \on x=-49..1,y=-3..46,z=-24..28\n\
-  \on x=2..47,y=-22..22,z=-23..27\n\
-  \on x=-27..23,y=-28..26,z=-21..29\n\
-  \on x=-39..5,y=-6..47,z=-3..44\n\
-  \on x=-30..21,y=-8..43,z=-13..34\n\
-  \on x=-22..26,y=-27..20,z=-29..19\n\
-  \off x=-48..-32,y=26..41,z=-47..-37\n\
-  \on x=-12..35,y=6..50,z=-50..-2\n\
-  \off x=-48..-32,y=-32..-16,z=-15..-5\n\
-  \on x=-18..26,y=-33..15,z=-7..46\n\
-  \off x=-40..-22,y=-38..-28,z=23..41\n\
-  \on x=-16..35,y=-41..10,z=-47..6\n\
-  \off x=-32..-23,y=11..30,z=-14..3\n\
-  \on x=-49..-5,y=-3..45,z=-29..18\n\
-  \off x=18..30,y=-20..-8,z=-3..13\n\
-  \on x=-41..9,y=-7..43,z=-33..15\n\
-  \on x=-54112..-39298,y=-85059..-49293,z=-27449..7877\n\
-  \on x=967..23432,y=45373..81175,z=27513..53682"
+cardinalityEngine :: EngineState -> Int
+cardinalityEngine (EngineState adds subtracts) =
+  sum (MS.map cardinalityCuboid adds) - sum (MS.map cardinalityCuboid subtracts)
 
-parseEx :: String
-parseEx =
-  "on x=10..12,y=10..12,z=10..12\n\
-  \on x=11..13,y=11..13,z=11..13\n\
-  \off x=9..11,y=9..11,z=9..11\n\
-  \on x=10..10,y=10..10,z=10..10"
+mkSpan a b | b < a = error "Inverted span"
+mkSpan a b = Span (a, b)
+
+cardinalitySpan :: Span -> Int
+cardinalitySpan (Span (a, b)) = b - a + 1
+
+intersectSpan :: Span -> Span -> Maybe Span
+intersectSpan (Span (a1, a2)) (Span (b1, b2))
+  | max1 <= min2 = Just $ mkSpan max1 min2
+  | otherwise    = Nothing
+  where
+    max1 = max a1 b1
+    min2 = min a2 b2
+
+cardinalityCuboid :: Cuboid -> Int
+cardinalityCuboid (Cuboid x y z) = product $ map cardinalitySpan [x, y, z]
+
+intersectCuboid :: Cuboid -> Cuboid -> Maybe Cuboid
+intersectCuboid (Cuboid x1 y1 z1) (Cuboid x2 y2 z2) = do
+  xspan <- intersectSpan x1 x2
+  yspan <- intersectSpan y1 y2
+  zspan <- intersectSpan z1 z2
+  return $ Cuboid xspan yspan zspan
+
+nullEngineState :: EngineState
+nullEngineState = EngineState MS.empty MS.empty
+
+gcEngine :: EngineState -> EngineState
+gcEngine (EngineState adds subtracts) =
+  EngineState (adds MS.\\ equals) (subtracts MS.\\ equals)
+  where
+    equals = MS.intersection adds subtracts
+
+applyAction :: CuboidAction -> EngineState -> EngineState
+applyAction (CuboidAction action c) (EngineState adds subtracts) =
+  case action of
+    On -> EngineState (MS.insert c $ MS.union subIntersects adds) (MS.union addIntersects subtracts)
+    Off -> EngineState (MS.union subIntersects adds) (MS.union addIntersects subtracts)
+  where
+    addIntersects = MS.mapMaybe (intersectCuboid c) adds
+    subIntersects = MS.mapMaybe (intersectCuboid c) subtracts

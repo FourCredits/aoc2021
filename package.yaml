@@ -23,6 +23,7 @@ dependencies:
 - containers
 - array
 - mtl
+- multiset
 
 library:
   source-dirs: src
