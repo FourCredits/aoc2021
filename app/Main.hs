@@ -21,6 +21,7 @@ import qualified Day18 as D18
 import qualified Day19 as D19
 import qualified Day20 as D20
 import qualified Day21 as D21
+import qualified Day25 as D25
 
 runDay ::
      (Show b, Show c)
@@ -64,3 +65,4 @@ main = do
   runDay   "resources/19.txt" D19.parser          D19.part1  D19.part2
   runDay   "resources/20.txt" D20.parser          D20.part1  D20.part2
   runDay   "resources/21.txt" D21.parser          D21.part1  D21.part2
+  runDay   "resources/25.txt" D25.parser          D25.part1  (const "")
