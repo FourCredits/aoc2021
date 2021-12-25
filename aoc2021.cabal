@@ -104,6 +104,7 @@ test-suite aoc2021-test
       Day17Spec
       Day18Spec
       Day19Spec
+      Day20Spec
       Day21Spec
       Paths_aoc2021
   hs-source-dirs:

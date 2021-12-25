@@ -1,100 +1,73 @@
 module Day20 where
 
-import Control.Arrow
+import Data.Array.IArray
 import Data.Function
 import Data.List
-import qualified Data.Map.Strict as M
--- import qualified Data.Set as S
-import Data.Array.IArray (range)
 
+import Utils.Misc
 import Utils.Parsing
 import Utils.TwoD
-import Utils.Misc
 
-type Image     = Position -> Bool
+newtype Image  = Image { getImage :: Array Position Bool }
+type Rectangle = (Position, Position) -- TODO: move to Utils.TwoD
 type Algorithm = [Bool]
-type Input     = (Algorithm, Image, (Int, Int))
-
--- TODO: make dims function abstracting the length and length head thing?
+type Input     = (Algorithm, Image)
 
 parser :: String -> Input
-parser s =
-  let isLight              = (== '#')
-      (algorithmS, imageS) = twoOf $ splitOn "\n\n" s
-      algorithm            = map isLight algorithmS
-      ls                   = lines imageS
-      h                    = length s
-      w                    = length (head ls)
-      r                    = range ((0, 0), (h - 1, w - 1))
-      m                    = M.fromList $ zip r (map isLight (concat ls))
-      image pos            = M.findWithDefault False pos m
-   in (algorithm, image, (h, w))
+parser s = (algorithm, image)
+  where
+    algorithm            = map isLight algorithmS
+    image                = Image $ listArray rectangle (map isLight (concat ls))
+    rectangle            = ((1, 1), dims ls)
+    (algorithmS, imageS) = twoOf $ splitOn "\n\n" s
+    ls                   = lines imageS
+    isLight              = (== '#')
+
+-- part 1 is 4968
+part1 :: Input -> Int
+part1 = countLit . enhance 2
+
+-- part 2 is 16793
+part2 :: Input -> Int
+part2 = countLit . enhance 50
+
+countLit :: Image -> Int
+countLit (Image i) = length $ filter id $ elems i
+
+enhance :: Int -> Input -> Image
+enhance n (algorithm, image) = image''
+  where
+    image' = expandImage n image
+    image'' = fst $ simulateN n enhance' (image', False)
+    bs = bounds (getImage image')
+    positions = range bs
+    enhance' (Image i, def) = (Image i', def')
+      where
+        i' =
+          listArray bs $
+          map
+            (\pos -> algorithm !! bitsToInt (map (i !?) $ square pos))
+            positions
+        def' = algorithm !! bitsToInt (replicate 9 def)
+        a !? p = if inRange bs p then a ! p else def
+
+expandImage :: Int -> Image -> Image
+expandImage n (Image image) =
+  Image $
+  listArray bs' $ do
+    pos <- range bs'
+    return (inRange bs pos && image ! pos)
+  where
+    bs = bounds image
+    bs' = expandRange n bs
+
+expandRange :: Int -> (Position, Position) -> (Position, Position)
+expandRange n ((yLo, xLo), (yHi, xHi)) =
+  ((yLo - n, xLo - n), (yHi + n, xHi + n))
+
+-- TODO: move to Utils.TwoD
+dims :: [[a]] -> (Int, Int)
+dims as = (length as, length (head as))
 
 square :: Position -> [Position]
 square (x, y) = [(x', y') | x' <- [x - 1 .. x + 1], y' <- [y - 1 .. y + 1]]
-
-enhanceN :: Int -> Algorithm -> Image -> Image
-enhanceN n algo image = iterate (enhance algo) image !! n
-
-enhance :: Algorithm -> Image -> Image
-enhance algo image pos = algo !! bitsToInt (map image $ square pos)
-
-pixelToChar :: Bool -> Char
-pixelToChar  True = '#'
-pixelToChar False = '.'
-
-part1 :: Input -> Int
-part1 (algo, image, (h, w)) =
-  let image' = enhanceN 2 algo image
-      r = range ((-4, -4), (h + 4, w + 4))
-   in length $ filter id $ map image' r
-
--- TODO: move to utils
-chunksOf :: Int -> [a] -> [[a]]
-chunksOf n [] = []
-chunksOf n xs = take n xs : chunksOf n (drop n xs)
-
-showRange :: (Position, Position) -> Image -> IO ()
-showRange (lo, hi) image =
-  putStrLn $
-  unlines $
-  chunksOf (1 + (fst hi - fst lo)) $ map (pixelToChar . image) (range (lo, hi))
-
-{-
-index :: Image -> Position -> Int
-index image pos =
-  bitsToInt $ map (\p -> M.findWithDefault False p image) $ square pos
-
-enhance :: Algorithm -> Image -> Image
-enhance algo image = M.mapWithKey (\k _ -> algo !! index image k) image
-
-showImage :: Image -> IO ()
-showImage image =
-  putStrLn $
-  unlines $
-  map (map ((\c -> if c then '#' else '.') .  snd)) $
-  groupBy ((==) `on` (fst . fst)) $ M.assocs image
--}
-
--- TODO: remove
-example =
-  parser $
-  unlines
-    [ concat
-        [ "..#.#..#####.#.#.#.###.##.....###.##.#..###.####..#####..#....#..#..##..##"
-        , "#..######.###...####..#..#####..##..#.#####...##.#.#..#.##..#.#......#.###"
-        , ".######.###.####...#.##.##..#..#..#####.....#.#....###..#.##......#.....#."
-        , ".#..#..##..#...##.######.####.####.#.#...#.......#..#.#.#...####.##.#....."
-        , ".#..#...##.#.##..#...##.#.##..###.#......#.#.......#.#.#.####.###.##...#.."
-        , "...####.#..#..#.##.#....##..#.####....##...##..#...#......#.#.......#....."
-        , "..##..####..#...#.#.#...##..#.#..###..#####........#..####......#..#"
-        ]
-    , ""
-    , "#..#."
-    , "#...."
-    , "##..#"
-    , "..#.."
-    , "..###"
-    ]
-
-(algo, image, (h,w)) = example

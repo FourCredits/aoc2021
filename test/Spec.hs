@@ -21,6 +21,7 @@ import Day16Spec
 import Day17Spec
 import Day18Spec
 import Day19Spec
+import Day20Spec
 import Day21Spec
 
 main :: IO ()
@@ -45,5 +46,6 @@ main =
     , day17
     , day18
     , day19
+    , day20
     , day21
     ]
