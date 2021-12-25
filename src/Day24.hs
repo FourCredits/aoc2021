@@ -42,6 +42,7 @@ parser = map instruction . lines
 startComp :: Computer
 startComp = M.fromList [(W, 0), (X, 0), (Y, 0), (Z, 0)]
 
+-- TODO: examine the input for patterns + Do some memoization
 part1 :: Program -> Int
 part1 program =
   maximum [undigits ns | ns <- replicateM 14 [1 .. 9], monad ns program]
