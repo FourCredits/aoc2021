@@ -24,32 +24,33 @@ import Day19Spec
 import Day20Spec
 import Day21Spec
 import Day22Spec
+import Day24Spec
 import Day25Spec
 
 main :: IO ()
 main =
-  runTestTTAndExit $
-  TestList
-    [ day01
-    , day02
-    , day03
-    , day04
-    , day05
-    , day06
-    , day07
-    , day08
-    , day09
-    , day10
-    , day11
-    , day12
-    , day13
-    , day14
-    , day16
-    , day17
-    , day18
-    , day19
-    , day20
-    , day21
-    , day22
-    , day25
-    ]
+  runTestTTAndExit $ day24
+  -- TestList
+  --   [ day01
+  --   , day02
+  --   , day03
+  --   , day04
+  --   , day05
+  --   , day06
+  --   , day07
+  --   , day08
+  --   , day09
+  --   , day10
+  --   , day11
+  --   , day12
+  --   , day13
+  --   , day14
+  --   , day16
+  --   , day17
+  --   , day18
+  --   , day19
+  --   , day20
+  --   , day21
+  --   , day22
+  --   , day25
+  --   ]

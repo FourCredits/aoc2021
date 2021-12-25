@@ -49,6 +49,7 @@ library
       Day20
       Day21
       Day22
+      Day24
       Day25
       Utils.Misc
       Utils.Parsing
@@ -110,6 +111,7 @@ test-suite aoc2021-test
       Day20Spec
       Day21Spec
       Day22Spec
+      Day24Spec
       Day25Spec
       Paths_aoc2021
   hs-source-dirs:
